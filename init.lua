@@ -19,7 +19,7 @@ vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 vim.o.confirm = true
 
 --Snappy escape
-vim.o.timeoutlen = 1
+vim.o.timeoutlen = 500
 
 --Vim diagnostic
 vim.diagnostic.config({
@@ -32,8 +32,33 @@ vim.diagnostic.config({
 --Show diagnostics
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, {desc = 'Show diagnostic'})
 
---Easily move beteween widnows
+--Easily move beteween windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+--Highlights yanks
+vim.api.nvim_create_autocmd('TextYankPost', {
+    group = vim.api.nvim_create_augroup('highlight-yank', {clear = true}),
+    callback = function() vim.highlight.on_yank() end
+})
+
+--Plugins
+vim.pack.add({
+    'https://github.com/ibhagwan/fzf-lua'
+})
+
+--Fzf-lua
+require("fzf-lua").setup({
+    keymap = {
+        builtin = {
+            ["<C-d>"] = 'preview-page-down',
+            ["<C-u>"] = 'preview-page-up',
+        },
+    },
+})
+
+vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', {desc = 'Find files'})
+vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', {desc = 'Find live grep'})
+
