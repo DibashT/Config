@@ -61,6 +61,7 @@ vim.pack.add({
   'https://github.com/esmuellert/codediff.nvim',
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
   'https://github.com/goolord/alpha-nvim',
+  'https://github.com/nvim-tree/nvim-web-devicons',
   'https://github.com/rebelot/kanagawa.nvim',
   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
 
@@ -78,7 +79,39 @@ require("fzf-lua").setup({
     backdrop = 60,
   },
   --fzf_colors = true,
+  -- winopts = {
+  --backdrop = 60,
+
+  --},
+  winopts = {
+    height = 0.85,          -- 0-1 relative to screen
+    width = 0.80,           -- 0-1 relative to screen
+    row = 0.5,              -- vertical position (0 top, 1 bottom)
+    col = 0.5,              -- horizontal position (0 left, 1 right)
+
+    border = "rounded",     -- none, single, double, rounded, shadow, or custom
+    backdrop = 60,          -- dim background (0-100)
+
+    fullscreen = false
+  },   -- override to full screen
+
+  preview = {
+    border = "border",         -- preview window border
+    wrap = false,
+    hidden = "hidden",         -- hide preview toggle
+    vertical = "down:45%",     -- layout control
+  },
+
+  hl = {
+    normal = "Normal",
+    border = "FloatBorder",
+    preview_normal = "Normal",
+    preview_border = "FloatBorder",
+  },
+  --fzf_colors = true,
 })
+vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', { desc = 'Find files' })
+vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Find live grep' })
 
 --Kanagawa
 require('kanagawa').setup({
@@ -103,9 +136,8 @@ vim.cmd('colorscheme kanagawa-wave')
 --Markdown
 require('render-markdown').setup({})
 
-vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', { desc = 'Find files' })
-vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Find live grep' })
-
+--Web-devicons
+require('nvim-web-devicons').setup({})
 --Tree_sitter
 vim.cmd('syntax off')
 vim.api.nvim_create_autocmd('FileType', {
