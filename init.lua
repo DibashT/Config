@@ -51,6 +51,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.highlight.on_yank() end
 })
 
+<<<<<<< HEAD
 --Plugins
 vim.pack.add({
   'https://github.com/ibhagwan/fzf-lua',
@@ -65,6 +66,50 @@ vim.pack.add({
   'https://github.com/rebelot/kanagawa.nvim',
   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
 
+=======
+-- --Plugins for 0.12.X and onward version
+-- vim.pack.add({
+--   'https://github.com/ibhagwan/fzf-lua',
+--   'https://github.com/nvim-treesitter/nvim-treesitter',
+--   'https://github.com/neovim/nvim-lspconfig',
+--   'https://github.com/stevearc/oil.nvim',
+--   'https://github.com/kdheepak/lazygit.nvim',
+--   'https://github.com/esmuellert/codediff.nvim',
+--   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+--   'https://github.com/goolord/alpha-nvim',
+--   'https://github.com/nvim-tree/nvim-web-devicons',
+--   'https://github.com/rebelot/kanagawa.nvim',
+--   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
+-- })
+
+--For 0.11.7 version
+-- 1. Bootstrap lazy.nvim (Modern Plugin Manager)
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- 2. Load Plugins
+require("lazy").setup({
+  'ibhagwan/fzf-lua',
+  { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
+  'neovim/nvim-lspconfig',
+  'stevearc/oil.nvim',
+  'kdheepak/lazygit.nvim',
+  'esmuellert/codediff.nvim',
+  'MeanderingProgrammer/render-markdown.nvim',
+  'goolord/alpha-nvim',
+  'nvim-tree/nvim-web-devicons',
+  'rebelot/kanagawa.nvim',
+  { 
+    'saghen/blink.cmp', 
+    version = '*', -- Use a release tag to download pre-built binaries
+  },
+>>>>>>> bcc3688 (Minor changes after switching to new os)
 })
 
 --Fzf-lua
@@ -191,4 +236,45 @@ require("codediff").setup({})
 
 --DAP
 
+<<<<<<< HEAD
 --Neovim Homescreen Configuration
+=======
+--Nevim home screen
+local alpha = require('alpha')
+local dashboard = require('alpha.themes.dashboard')
+
+-- 1. Header (ASCII Art)
+dashboard.section.header.val = {
+    [[                               __                ]],
+    [[  ___     ___    ___   __  __ /\_\    ___ ___    ]],
+    [[ / _ `\  / __`\ / __`\/\ \/\ \\/\ \  / __` __`\  ]],
+    [[/\ \/\ \/\  __//\ \_\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
+    [[\ \_\ \_\ \____\ \____/\ \___/  \ \_\ \_\ \_\ \_\]],
+    [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
+}
+
+-- 2. Buttons (Mapped to your existing config)
+dashboard.section.buttons.val = {
+    dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
+    dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
+    dashboard.button("r", "󰄉  Recent Files", "<cmd>FzfLua oldfiles<CR>"),
+    dashboard.button("g", "󰊢  Git (LazyGit)", "<cmd>LazyGit<CR>"),
+    dashboard.button("s", "  Settings", "<cmd>e $MYVIMRC<CR>"),
+    dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
+}
+
+-- 3. Footer (Optional: dynamically shows plugin count)
+local stats = require("lazy").stats()
+local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+dashboard.section.footer.val = "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
+
+-- 4. Apply Highlights (Kanagawa compatible)
+dashboard.section.header.opts.hl = "AlphaHeader"
+dashboard.section.buttons.opts.hl = "AlphaButtons"
+dashboard.section.footer.opts.hl = "AlphaFooter"
+
+alpha.setup(dashboard.opts)
+
+
+
+>>>>>>> bcc3688 (Minor changes after switching to new os)
