@@ -48,7 +48,7 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 --Highlights yanks
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
-  callback = function() vim.highlight.on_yank() end
+  callback = function() vim.hl.on_yank() end
 })
 
 -- --Plugins for nvim 0.12.X onward
@@ -95,52 +95,6 @@ require("lazy").setup({
   },
 })
 
---Fzf-lua
-require("fzf-lua").setup({
-  keymap = {
-    builtin = {
-      ["<C-d>"] = 'preview-page-down',
-      ["<C-u>"] = 'preview-page-up',
-    },
-  },
-  winopts = {
-    backdrop = 60,
-  },
-  --fzf_colors = true,
-  -- winopts = {
-  --backdrop = 60,
-
-  --},
-  winopts = {
-    height = 0.85,          -- 0-1 relative to screen
-    width = 0.80,           -- 0-1 relative to screen
-    row = 0.5,              -- vertical position (0 top, 1 bottom)
-    col = 0.5,              -- horizontal position (0 left, 1 right)
-
-    border = "rounded",     -- none, single, double, rounded, shadow, or custom
-    backdrop = 60,          -- dim background (0-100)
-
-    fullscreen = false
-  },   -- override to full screen
-
-  preview = {
-    border = "border",         -- preview window border
-    wrap = false,
-    hidden = "hidden",         -- hide preview toggle
-    vertical = "down:45%",     -- layout control
-  },
-
-  hl = {
-    normal = "Normal",
-    border = "FloatBorder",
-    preview_normal = "Normal",
-    preview_border = "FloatBorder",
-  },
-  --fzf_colors = true,
-})
-vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', { desc = 'Find files' })
-vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Find live grep' })
-
 --Kanagawa
 require('kanagawa').setup({
   colors = {
@@ -155,17 +109,37 @@ require('kanagawa').setup({
 })
 vim.cmd('colorscheme kanagawa-wave')
 
--- Configure cursor style and appearance
--- vim.o.guicursor = 'n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50'
-
--- Style the cursor with underline
--- vim.api.nvim_set_hl(0, 'Cursor', { underline = true, cterm = { underline = true } })
-
 --Markdown
 require('render-markdown').setup({})
 
+--Fzf-lua
+require("fzf-lua").setup({
+  keymap = {
+    builtin = {
+      ["<C-d>"] = 'preview-page-down',
+      ["<C-u>"] = 'preview-page-up',
+    },
+  },  
+  winopts = {
+    height  = 0.95, -- window height
+    width   = 0.90, -- window width    
+  },
+  files = {
+    formatter = 'path.filename_first',
+  },
+})
+vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', { desc = 'Find files' })
+vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Find live grep' })
+vim.keymap.set('n', '<leader>fr', '<cmd>FzfLua resume<cr>', { desc = 'Resume last picker' })
+vim.keymap.set('n', '<leader>,', '<cmd>FzfLua buffers<cr>', { desc = 'Buffers' })
+
+-- vim.keymap.set('n', 'grr', fzf.lsp_references, { desc = 'References' })
+-- vim.keymap.set('n', 'gri', fzf.lsp_implementations, { desc = 'Implementations' })
+-- vim.keymap.set('n', 'gra', fzf.lsp_code_actions, { desc = 'Code actions' })
+
 --Web-devicons
 require('nvim-web-devicons').setup({})
+
 --Tree_sitter
 vim.cmd('syntax off')
 vim.api.nvim_create_autocmd('FileType', {
@@ -199,7 +173,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-
 --Blink
 require('blink.cmp').setup({})
 
@@ -219,7 +192,6 @@ require("codediff").setup({})
 
 --DAP
 
---Neovim Homescreen Configuration
 --Nevim home screen
 local alpha = require('alpha')
 local dashboard = require('alpha.themes.dashboard')
