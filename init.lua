@@ -51,7 +51,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.highlight.on_yank() end
 })
 
-<<<<<<< HEAD
 --Plugins
 vim.pack.add({
   'https://github.com/ibhagwan/fzf-lua',
@@ -66,7 +65,6 @@ vim.pack.add({
   'https://github.com/rebelot/kanagawa.nvim',
   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
 
-=======
 -- --Plugins for 0.12.X and onward version
 -- vim.pack.add({
 --   'https://github.com/ibhagwan/fzf-lua',
@@ -109,7 +107,6 @@ require("lazy").setup({
     'saghen/blink.cmp', 
     version = '*', -- Use a release tag to download pre-built binaries
   },
->>>>>>> bcc3688 (Minor changes after switching to new os)
 })
 
 --Fzf-lua
@@ -236,9 +233,7 @@ require("codediff").setup({})
 
 --DAP
 
-<<<<<<< HEAD
 --Neovim Homescreen Configuration
-=======
 --Nevim home screen
 local alpha = require('alpha')
 local dashboard = require('alpha.themes.dashboard')
@@ -275,6 +270,3 @@ dashboard.section.footer.opts.hl = "AlphaFooter"
 
 alpha.setup(dashboard.opts)
 
-
-
->>>>>>> bcc3688 (Minor changes after switching to new os)
