@@ -50,6 +50,8 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
   callback = function() vim.hl.on_yank() end
 })
+-- Cursor shape per mode
+vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
 
 -- --Plugins for nvim 0.12.X onward
 -- vim.pack.add({
