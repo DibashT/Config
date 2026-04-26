@@ -1,4 +1,4 @@
---Set Leader
+--Set LeadeR
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -9,13 +9,17 @@ vim.o.mouse = 'a'           -- Enable mouse support
 vim.o.ignorecase = true     -- Ignore case in search
 vim.o.smartcase = true      -- ...unless search has capital letters
 vim.o.shiftwidth = 2        -- Size of an indent
+vim.o.tabstop = 2  --Tab width
+vim.o.shiftwidth = 2  --indent width
 vim.o.expandtab = true      -- Use spaces instead of tabs
 vim.o.termguicolors = true  -- Better colors
 vim.o.scrolloff = 10        -- Keep 10 line below/above cursor line
 vim.o.sidescrolloff = 10    -- Keep 10 line left/right cusrsor line
-
---Raise dialog in unsaved buffer
-vim.o.confirm = true
+vim.o.spelllang = en   -- spell check
+vim.o.cmdheight = 1         --command line height
+vim.o.selection = "inclusive"  --Use inclusive selection
+vim.o.confirm = true  --Raise dialog in unsaved buffer
+vim.o.encoding = "UTF-8" --Ut8 encoding
 
 --Snappy escape
 vim.o.updatetime = 250
@@ -24,6 +28,17 @@ vim.o.timeoutlen = 250
 --How new window appear
 vim.o.splitright = true
 vim.o.splitbelow = true
+
+--File handling
+vim.o.undofile = true --Persistent undo
+
+-- Set undo directory and ensure it exists
+local undodir = "~/.local/share/nvim/undodir "
+vim.o.undodir = vim.fn.expand(undodir)
+local undodir_path = vim.fn.expand(undodir)
+if vim.fn.isdirectory(undodir_path) == 0 then
+  vim.fn.mkdir(undodir_path, "p")
+end
 
 --Sync clipboards
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
@@ -39,19 +54,35 @@ vim.diagnostic.config({
 --Show diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 
---Easily move beteween windows
+--Easily move between windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Cursor shape per mode
+vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
+
+-- Restore last cursor position when reopening a file
+local last_cursor_group = vim.api.nvim_create_augroup("LastCursorGroup", {})
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = last_cursor_group,
+	callback = function()
+		local mark = vim.api.nvim_buf_get_mark(0, '"')
+		local lcount = vim.api.nvim_buf_line_count(0)
+		if mark[1] > 0 and mark[1] <= lcount then
+			pcall(vim.api.nvim_win_set_cursor, 0, mark)
+		end
+	end,
+})
 
 --Highlights yanks
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
   callback = function() vim.hl.on_yank() end
 })
--- Cursor shape per mode
-vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
+
+-- Restore last cursor position when reopening file
 
 -- --Plugins for nvim 0.12.X onward
 -- vim.pack.add({
@@ -88,14 +119,18 @@ require("lazy").setup({
   'kdheepak/lazygit.nvim',
   'esmuellert/codediff.nvim',
   'MeanderingProgrammer/render-markdown.nvim',
-  'goolord/alpha-nvim',
+  'goolord/alpha-nvim',  
   'nvim-tree/nvim-web-devicons',
+  -- {'nvim-mini/mini.nvim', version = "*" },
   'rebelot/kanagawa.nvim',
   { 
     'saghen/blink.cmp', 
     version = '*', -- Use a release tag to download pre-built binaries
   },
 })
+
+--Mini modules
+--require('mini.icons').setup()
 
 --Kanagawa
 require('kanagawa').setup({
