@@ -43,6 +43,19 @@ end
 --Sync clipboards
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
+-- Copy to clipboard shortcuts
+vim.keymap.set('n', '<leader>cp', function()
+	local path = vim.fn.expand('%:p')
+	vim.fn.setreg('+', path)
+	vim.notify('Copied: ' .. path)
+end, { desc = 'Copy absolute path' })
+
+vim.keymap.set('n', '<leader>cr', function()
+	local path = vim.fn.expand('%')
+	vim.fn.setreg('+', path)
+	vim.notify('Copied: ' .. path)
+end, { desc = 'Copy relative path' })
+
 --Vim diagnostic
 vim.diagnostic.config({
   severity_sort = true,
@@ -120,17 +133,24 @@ require("lazy").setup({
   'esmuellert/codediff.nvim',
   'MeanderingProgrammer/render-markdown.nvim',
   'goolord/alpha-nvim',  
-  'nvim-tree/nvim-web-devicons',
-  -- {'nvim-mini/mini.nvim', version = "*" },
+  'nvim-tree/nvim-web-devicons', 
   'rebelot/kanagawa.nvim',
-  { 
+  {
     'saghen/blink.cmp', 
     version = '*', -- Use a release tag to download pre-built binaries
   },
+-- Mini plugins
+  { "echasnovski/mini.ai",          version = "*", opts = {} },
+  { "echasnovski/mini.comment",     version = "*", opts = {} },
+  { "echasnovski/mini.move",        version = "*", opts = {} },
+  { "echasnovski/mini.surround",    version = "*", opts = {} },
+  { "echasnovski/mini.cursorword",  version = "*", opts = {} },
+  { "echasnovski/mini.indentscope", version = "*", opts = {} },
+  { "echasnovski/mini.pairs",       version = "*", opts = {} },
+  { "echasnovski/mini.trailspace",  version = "*", opts = {} },
+  { "echasnovski/mini.bufremove",   version = "*", opts = {} },
+  { "echasnovski/mini.notify",      version = "*", opts = {} },
 })
-
---Mini modules
---require('mini.icons').setup()
 
 --Kanagawa
 require('kanagawa').setup({
@@ -159,7 +179,7 @@ require("fzf-lua").setup({
   },  
   winopts = {
     height  = 0.95, -- window height
-    width   = 0.90, -- window width    
+    width   = 0.90, -- window width
   },
   files = {
     formatter = 'path.filename_first',
@@ -223,8 +243,10 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 --Lazygit
 vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'LazyGit' })
+vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
+	{ desc = 'Open git remote' })
 
--- Codediff (vscode like diffs :))
+ -- Codediff (vscode like diffs :))
 require("codediff").setup({})
 
 --DAP
