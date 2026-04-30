@@ -139,7 +139,36 @@ require("lazy").setup({
     'saghen/blink.cmp', 
     version = '*', -- Use a release tag to download pre-built binaries
   },
--- Mini plugins
+  
+ -- Cursor animations
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      smear_between_buffers            = true,
+      smear_between_neighbor_lines     = true,
+      scroll_buffer_space              = true,
+      legacy_computing_symbols_support = true,
+      stiffness                        = 0.8,
+      trailing_stiffness               = 0.5,
+      distance_stop_animating          = 0.5,
+    },
+  },
+  {
+  "gen740/SmoothCursor.nvim",
+  config = function()
+    require("smoothcursor").setup({
+      type               = "exp",
+      cursor             = "▷",
+      speed              = 25,
+      intervals          = 35,
+      threshold          = 3,
+      disable_float_win  = true,
+      disabled_filetypes = { "help", "NvimTree" },
+    })
+    vim.cmd("SmoothCursorStart")  -- auto-start it
+  end,
+  },
+  -- Mini plugins
   { "echasnovski/mini.ai",          version = "*", opts = {} },
   { "echasnovski/mini.comment",     version = "*", opts = {} },
   { "echasnovski/mini.move",        version = "*", opts = {} },
@@ -150,6 +179,17 @@ require("lazy").setup({
   { "echasnovski/mini.trailspace",  version = "*", opts = {} },
   { "echasnovski/mini.bufremove",   version = "*", opts = {} },
   { "echasnovski/mini.notify",      version = "*", opts = {} },
+  {
+    "echasnovski/mini.animate",
+    version = "*",
+    opts = {
+      cursor = { enable = false },
+      scroll = { enable = false },
+      resize = { enable = true  },
+      open   = { enable = true  },
+      close  = { enable = true  },
+    },
+  },
 })
 
 --Kanagawa
@@ -206,7 +246,6 @@ vim.api.nvim_create_autocmd('FileType', {
 --LSP
 vim.lsp.enable({
   'ty',
-  'ruff',
   'lua_ls',
   'ts_ls',
 })
