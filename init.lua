@@ -10,6 +10,7 @@ vim.o.ignorecase = true     -- Ignore case in search
 vim.o.smartcase = true      -- ...unless search has capital letters
 vim.o.shiftwidth = 2        -- Size of an indent
 vim.o.tabstop = 2  --Tab width
+vim.opt.smartindent = true  --smart indentation 
 vim.o.expandtab = true      -- Use spaces instead of tabs
 vim.o.termguicolors = true  -- Better colors
 vim.o.scrolloff = 10        -- Keep 10 line below/above cursor line
@@ -63,6 +64,9 @@ vim.diagnostic.config({
   float = { source = 'if_many' },
   jump = { float = true },
 })
+
+--Open the config file
+--vim.keymap.set('n', '<leader>rc', '<cmd>e $MYVIMRC<cr>', { desc = 'Open config' })
 
 --Show diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
