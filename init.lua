@@ -10,16 +10,16 @@ vim.o.ignorecase = true     -- Ignore case in search
 vim.o.smartcase = true      -- ...unless search has capital letters
 vim.o.shiftwidth = 2        -- Size of an indent
 vim.o.tabstop = 2  --Tab width
-vim.o.shiftwidth = 2  --indent width
 vim.o.expandtab = true      -- Use spaces instead of tabs
 vim.o.termguicolors = true  -- Better colors
 vim.o.scrolloff = 10        -- Keep 10 line below/above cursor line
 vim.o.sidescrolloff = 10    -- Keep 10 line left/right cusrsor line
-vim.o.spelllang = en   -- spell check
+vim.o.spelllang = 'en'   -- spell check
 vim.o.cmdheight = 1         --command line height
 vim.o.selection = "inclusive"  --Use inclusive selection
 vim.o.confirm = true  --Raise dialog in unsaved buffer
 vim.o.encoding = "UTF-8" --Ut8 encoding
+vim.o.signcolumn = 'yes'  --Alwasy show sign column
 
 --Snappy escape
 vim.o.updatetime = 250
@@ -33,9 +33,9 @@ vim.o.splitbelow = true
 vim.o.undofile = true --Persistent undo
 
 -- Set undo directory and ensure it exists
-local undodir = "~/.local/share/nvim/undodir "
-vim.o.undodir = vim.fn.expand(undodir)
+local undodir = "~/.local/share/nvim/undodir"
 local undodir_path = vim.fn.expand(undodir)
+vim.o.undodir = undodir_path
 if vim.fn.isdirectory(undodir_path) == 0 then
   vim.fn.mkdir(undodir_path, "p")
 end
@@ -95,8 +95,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function() vim.hl.on_yank() end
 })
 
--- Restore last cursor position when reopening file
-
 -- --Plugins for nvim 0.12.X onward
 -- vim.pack.add({
 --   'https://github.com/ibhagwan/fzf-lua',
@@ -112,8 +110,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
 -- })
 
---For 0.11.7 version
--- 1. Bootstrap lazy.nvim (Modern Plugin Manager)
+--For 0.11.7 version Plugin required for lazy.vim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -122,8 +119,7 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
--- 2. Load Plugins
+ 
 require("lazy").setup({
   'ibhagwan/fzf-lua',
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
@@ -132,15 +128,12 @@ require("lazy").setup({
   'kdheepak/lazygit.nvim',
   'esmuellert/codediff.nvim',
   'MeanderingProgrammer/render-markdown.nvim',
-  'goolord/alpha-nvim',  
-  'nvim-tree/nvim-web-devicons', 
+  'goolord/alpha-nvim',
+  'nvim-tree/nvim-web-devicons',
   'rebelot/kanagawa.nvim',
-  {
-    'saghen/blink.cmp', 
-    version = '*', -- Use a release tag to download pre-built binaries
-  },
-  
- -- Cursor animations
+  { 'saghen/blink.cmp', version = '*' },
+ 
+  -- Cursor animations
   {
     "sphamba/smear-cursor.nvim",
     opts = {
@@ -148,26 +141,14 @@ require("lazy").setup({
       smear_between_neighbor_lines     = true,
       scroll_buffer_space              = true,
       legacy_computing_symbols_support = true,
-      stiffness                        = 0.8,
-      trailing_stiffness               = 0.5,
+      stiffness                        = 0.95,
+      trailing_stiffness               = 0.75,
       distance_stop_animating          = 0.5,
+      smear_to_cmd = true,
+      hide_target_hack = false,
     },
-  },
-  {
-  "gen740/SmoothCursor.nvim",
-  config = function()
-    require("smoothcursor").setup({
-      type               = "exp",
-      cursor             = "▷",
-      speed              = 25,
-      intervals          = 35,
-      threshold          = 3,
-      disable_float_win  = true,
-      disabled_filetypes = { "help", "NvimTree" },
-    })
-    vim.cmd("SmoothCursorStart")  -- auto-start it
-  end,
-  },
+  }, 
+
   -- Mini plugins
   { "echasnovski/mini.ai",          version = "*", opts = {} },
   { "echasnovski/mini.comment",     version = "*", opts = {} },
@@ -216,7 +197,7 @@ require("fzf-lua").setup({
       ["<C-d>"] = 'preview-page-down',
       ["<C-u>"] = 'preview-page-up',
     },
-  },  
+  }, 
   winopts = {
     height  = 0.95, -- window height
     width   = 0.90, -- window width

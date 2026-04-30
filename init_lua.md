@@ -1,5 +1,5 @@
 
---Set Leader
+--Set LeadeR
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -10,13 +10,17 @@ vim.o.mouse = 'a'           -- Enable mouse support
 vim.o.ignorecase = true     -- Ignore case in search
 vim.o.smartcase = true      -- ...unless search has capital letters
 vim.o.shiftwidth = 2        -- Size of an indent
+vim.o.tabstop = 2  --Tab width
+vim.o.shiftwidth = 2  --indent width
 vim.o.expandtab = true      -- Use spaces instead of tabs
 vim.o.termguicolors = true  -- Better colors
 vim.o.scrolloff = 10        -- Keep 10 line below/above cursor line
 vim.o.sidescrolloff = 10    -- Keep 10 line left/right cusrsor line
-
---Raise dialog in unsaved buffer
-vim.o.confirm = true
+vim.o.spelllang = en   -- spell check
+vim.o.cmdheight = 1         --command line height
+vim.o.selection = "inclusive"  --Use inclusive selection
+vim.o.confirm = true  --Raise dialog in unsaved buffer
+vim.o.encoding = "UTF-8" --Ut8 encoding
 
 --Snappy escape
 vim.o.updatetime = 250
@@ -26,8 +30,32 @@ vim.o.timeoutlen = 250
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+--File handling
+vim.o.undofile = true --Persistent undo
+
+-- Set undo directory and ensure it exists
+local undodir = "~/.local/share/nvim/undodir "
+vim.o.undodir = vim.fn.expand(undodir)
+local undodir_path = vim.fn.expand(undodir)
+if vim.fn.isdirectory(undodir_path) == 0 then
+  vim.fn.mkdir(undodir_path, "p")
+end
+
 --Sync clipboards
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
+
+-- Copy to clipboard shortcuts
+vim.keymap.set('n', '<leader>cp', function()
+	local path = vim.fn.expand('%:p')
+	vim.fn.setreg('+', path)
+	vim.notify('Copied: ' .. path)
+end, { desc = 'Copy absolute path' })
+
+vim.keymap.set('n', '<leader>cr', function()
+	local path = vim.fn.expand('%')
+	vim.fn.setreg('+', path)
+	vim.notify('Copied: ' .. path)
+end, { desc = 'Copy relative path' })
 
 --Vim diagnostic
 vim.diagnostic.config({
@@ -40,17 +68,35 @@ vim.diagnostic.config({
 --Show diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.open_float, { desc = 'Show diagnostic' })
 
---Easily move beteween windows
+--Easily move between windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Cursor shape per mode
+vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
+
+-- Restore last cursor position when reopening a file
+local last_cursor_group = vim.api.nvim_create_augroup("LastCursorGroup", {})
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = last_cursor_group,
+	callback = function()
+		local mark = vim.api.nvim_buf_get_mark(0, '"')
+		local lcount = vim.api.nvim_buf_line_count(0)
+		if mark[1] > 0 and mark[1] <= lcount then
+			pcall(vim.api.nvim_win_set_cursor, 0, mark)
+		end
+	end,
+})
 
 --Highlights yanks
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
   callback = function() vim.hl.on_yank() end
 })
+
+-- Restore last cursor position when reopening file
 
 -- --Plugins for nvim 0.12.X onward
 -- vim.pack.add({
@@ -88,11 +134,61 @@ require("lazy").setup({
   'esmuellert/codediff.nvim',
   'MeanderingProgrammer/render-markdown.nvim',
   'goolord/alpha-nvim',
-  'nvim-tree/nvim-web-devicons',
+  'nvim-tree/nvim-web-devicons', 
   'rebelot/kanagawa.nvim',
-  { 
+  {
     'saghen/blink.cmp', 
     version = '*', -- Use a release tag to download pre-built binaries
+  }, 
+ -- Cursor animations
+  {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      smear_between_buffers            = true,
+      smear_between_neighbor_lines     = true,
+      scroll_buffer_space              = true,
+      legacy_computing_symbols_support = false,
+      stiffness                        = 0.95,
+      trailing_stiffness               = 0.75,
+      distance_stop_animating          = 0.5,
+    },
+  },
+  {
+  "gen740/SmoothCursor.nvim",
+  config = function()
+    require("smoothcursor").setup({
+      type               = "exp",
+      cursor             = "▷",
+      speed              = 50,
+      intervals          = 35,
+      threshold          = 3,
+      disable_float_win  = true,
+      disabled_filetypes = { "help", "NvimTree" },
+    })
+    vim.cmd("SmoothCursorStart")  -- auto-start it
+  end,
+  },
+  -- Mini plugins
+  { "echasnovski/mini.ai",          version = "*", opts = {} },
+  { "echasnovski/mini.comment",     version = "*", opts = {} },
+  { "echasnovski/mini.move",        version = "*", opts = {} },
+  { "echasnovski/mini.surround",    version = "*", opts = {} },
+  { "echasnovski/mini.cursorword",  version = "*", opts = {} },
+  { "echasnovski/mini.indentscope", version = "*", opts = {} },
+  { "echasnovski/mini.pairs",       version = "*", opts = {} },
+  { "echasnovski/mini.trailspace",  version = "*", opts = {} },
+  { "echasnovski/mini.bufremove",   version = "*", opts = {} },
+  { "echasnovski/mini.notify",      version = "*", opts = {} },
+  {
+    "echasnovski/mini.animate",
+    version = "*",
+    opts = {
+      cursor = { enable = false },
+      scroll = { enable = false },
+      resize = { enable = true  },
+      open   = { enable = true  },
+      close  = { enable = true  },
+    },
   },
 })
 
@@ -120,10 +216,10 @@ require("fzf-lua").setup({
       ["<C-d>"] = 'preview-page-down',
       ["<C-u>"] = 'preview-page-up',
     },
-  },  
+  }, 
   winopts = {
     height  = 0.95, -- window height
-    width   = 0.90, -- window width    
+    width   = 0.90, -- window width
   },
   files = {
     formatter = 'path.filename_first',
@@ -150,7 +246,6 @@ vim.api.nvim_create_autocmd('FileType', {
 --LSP
 vim.lsp.enable({
   'ty',
-  'ruff',
   'lua_ls',
   'ts_ls',
 })
@@ -187,11 +282,33 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 --Lazygit
 vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'LazyGit' })
+vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
+	{ desc = 'Open git remote' })
 
--- Codediff (vscode like diffs :))
+ -- Codediff (vscode like diffs :))
 require("codediff").setup({})
 
 --DAP
+
+-- Fix for 'nvim .' startup: 
+-- Force SmoothCursor to start when entering an Oil buffer
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "oil",
+  callback = function()
+    -- Small delay to ensure the UI has rendered before starting animation
+    vim.defer_fn(function()
+      vim.cmd("SmoothCursorStart")
+    end, 50)
+  end,
+})
+
+-- Optional: Ensure it starts on the Alpha dashboard too
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "alpha",
+  callback = function()
+    vim.cmd("SmoothCursorStart")
+  end,
+})
 
 --Nevim home screen
 local alpha = require('alpha')
@@ -228,4 +345,6 @@ dashboard.section.buttons.opts.hl = "AlphaButtons"
 dashboard.section.footer.opts.hl = "AlphaFooter"
 
 alpha.setup(dashboard.opts)
+
+
 
