@@ -3,25 +3,25 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Basic Settings
-vim.o.number = true         -- Show line numbers
-vim.o.relativenumber = true -- Relative line numbers (easier jumping)
-vim.o.mouse = 'a'           -- Enable mouse support
-vim.o.ignorecase = true     -- Ignore case in search
-vim.o.smartcase = true      -- ...unless search has capital letters
-vim.o.shiftwidth = 2        -- Size of an indent
-vim.o.tabstop = 2  --Tab width
-vim.opt.smartindent = true  --smart indentation 
-vim.o.expandtab = true      -- Use spaces instead of tabs
-vim.o.termguicolors = true  -- Better colors
-vim.o.scrolloff = 10        -- Keep 10 line below/above cursor line
-vim.o.sidescrolloff = 10    -- Keep 10 line left/right cusrsor line
-vim.o.wrap = false --Don't wrap lines
-vim.o.spelllang = 'en'   -- spell check
-vim.o.cmdheight = 1         --command line height
-vim.o.confirm = true   --Raise dialog in unsaved buffer
-vim.o.signcolumn = 'yes'  --Alwasy show sign column
-vim.o.hlsearch = true  --Don't highlight serach result
-vim.o.incsearch = true --Show matches as you type
+vim.o.number = true                             -- Show line numbers
+vim.o.relativenumber = true                     -- Relative line numbers (easier jumping)
+vim.o.mouse = 'a'                               -- Enable mouse support
+vim.o.ignorecase = true                         -- Ignore case in search
+vim.o.smartcase = true                          -- ...unless search has capital letters
+vim.o.shiftwidth = 2                            -- Size of an indent
+vim.o.tabstop = 2                               --Tab width
+vim.opt.smartindent = true                      --smart indentation
+vim.o.expandtab = true                          -- Use spaces instead of tabs
+vim.o.termguicolors = true                      -- Better colors
+vim.o.scrolloff = 10                            -- Keep 10 line below/above cursor line
+vim.o.sidescrolloff = 10                        -- Keep 10 line left/right cusrsor line
+vim.o.wrap = false                              --Don't wrap lines
+vim.o.spelllang = 'en'                          -- spell check
+vim.o.cmdheight = 1                             --command line height
+vim.o.confirm = true                            --Raise dialog in unsaved buffer
+vim.o.signcolumn = 'yes'                        --Alwasy show sign column
+vim.o.hlsearch = true                           --Don't highlight serach result
+vim.o.incsearch = true                          --Show matches as you type
 -- vim.o.colorcolumn = "100" --Show column at 100 characters
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
 
@@ -46,27 +46,27 @@ if vim.fn.isdirectory(undodir_path) == 0 then
 end
 
 --Behavious setting
-vim.o.selection = "inclusive"  --Use inclusive selection
-vim.o.modifiable = true --Allow editing buffers
-vim.o.encoding = "UTF-8" --Ut8 encoding
-vim.o.wildmenu = true --Enable command line completion menu
-vim.o.wildmode = "longest:full,full"  --Completion mode for command-line
-vim.o.wildignorecase = true --Case-sensitive tab completion in commands
+vim.o.selection = "inclusive"        --Use inclusive selection
+vim.o.modifiable = true              --Allow editing buffers
+vim.o.encoding = "UTF-8"             --Ut8 encoding
+vim.o.wildmenu = true                --Enable command line completion menu
+vim.o.wildmode = "longest:full,full" --Completion mode for command-line
+vim.o.wildignorecase = true          --Case-sensitive tab completion in commands
 
 --Sync clipboards
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Copy to clipboard shortcuts
 vim.keymap.set('n', '<leader>cp', function()
-	local path = vim.fn.expand('%:p')
-	vim.fn.setreg('+', path)
-	vim.notify('Copied: ' .. path)
+  local path = vim.fn.expand('%:p')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied: ' .. path)
 end, { desc = 'Copy absolute path' })
 
 vim.keymap.set('n', '<leader>cr', function()
-	local path = vim.fn.expand('%')
-	vim.fn.setreg('+', path)
-	vim.notify('Copied: ' .. path)
+  local path = vim.fn.expand('%')
+  vim.fn.setreg('+', path)
+  vim.notify('Copied: ' .. path)
 end, { desc = 'Copy relative path' })
 
 --Vim diagnostic
@@ -95,14 +95,14 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 --Better indenting in Visual mode
-vim.keymap.set('v', '<', '<gv', {desc = 'Indent left and reselect'})
-vim.keymap.set('v', '>', '>gv', {desc = 'Indent right and reselect'})
+vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and reselect' })
+vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and reselect' })
 
 --Better j Behaviour
-vim.keymap.set('n', 'J', 'mzJ`z', {desc = 'Join line in cursor position'})
+vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join line in cursor position' })
 
 --Quick config setting
-vim.keymap.set('n', '<leader>rc', '<Cmd>e ~/.config/nvim/init.lua<CR>', {desc = 'Edit config'})
+vim.keymap.set('n', '<leader>rc', '<Cmd>e ~/.config/nvim/init.lua<CR>', { desc = 'Edit config' })
 
 -- Cursor shape per mode
 vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
@@ -110,14 +110,14 @@ vim.o.guicursor = 'n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50'
 -- Restore last cursor position when reopening a file
 local last_cursor_group = vim.api.nvim_create_augroup("LastCursorGroup", {})
 vim.api.nvim_create_autocmd("BufReadPost", {
-	group = last_cursor_group,
-	callback = function()
-		local mark = vim.api.nvim_buf_get_mark(0, '"')
-		local lcount = vim.api.nvim_buf_line_count(0)
-		if mark[1] > 0 and mark[1] <= lcount then
-			pcall(vim.api.nvim_win_set_cursor, 0, mark)
-		end
-	end,
+  group = last_cursor_group,
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
 })
 
 --Highlights yanks
@@ -149,12 +149,17 @@ if not vim.loop.fs_stat(lazypath) then
     "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath,
   })
 end
-vim.opt.rtp:prepend(lazypath) 
+vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
   'ibhagwan/fzf-lua',
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
-  'neovim/nvim-lspconfig',
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      { 'mason-org/mason.nvim', opts = {} },
+    },
+  },
   'stevearc/oil.nvim',
   'kdheepak/lazygit.nvim',
   'esmuellert/codediff.nvim',
@@ -163,17 +168,17 @@ require("lazy").setup({
   'nvim-tree/nvim-web-devicons',
   'rebelot/kanagawa.nvim',
   {
-      'nvim-lualine/lualine.nvim',
-      dependencies = { 'nvim-tree/nvim-web-devicons' },
-      opts = {
-        options = {
-          theme = 'kanagawa',
-          component_separators = '|',
-          section_separators = { left = '', right = '' },
-        },
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {
+      options = {
+        theme = 'kanagawa',
+        component_separators = '|',
+        section_separators = { left = '', right = '' },
       },
     },
-  { 'saghen/blink.cmp', version = '*' }, 
+  },
+  { 'saghen/blink.cmp',                version = '*' },
   -- Cursor animations
   {
     "sphamba/smear-cursor.nvim",
@@ -185,10 +190,10 @@ require("lazy").setup({
       stiffness                        = 0.5,
       trailing_stiffness               = 0.3,
       distance_stop_animating          = 0.1,
-      smear_to_cmd = true,
-      hide_target_hack = false,
+      smear_to_cmd                     = true,
+      hide_target_hack                 = false,
     },
-  }, 
+  },
 
   -- Mini plugins
   { "echasnovski/mini.ai",          version = "*", opts = {} },
@@ -201,17 +206,6 @@ require("lazy").setup({
   { "echasnovski/mini.trailspace",  version = "*", opts = {} },
   { "echasnovski/mini.bufremove",   version = "*", opts = {} },
   { "echasnovski/mini.notify",      version = "*", opts = {} },
-  {
-    "echasnovski/mini.animate",
-    version = "*",
-    opts = {
-      cursor = { enable = false },
-      scroll = { enable = false },
-      resize = { enable = true  },
-      open   = { enable = true  },
-      close  = { enable = true  },
-    },
-  },
 })
 
 --Kanagawa
@@ -238,10 +232,10 @@ require("fzf-lua").setup({
       ["<C-d>"] = 'preview-page-down',
       ["<C-u>"] = 'preview-page-up',
     },
-  }, 
+  },
   winopts = {
-    height  = 0.95, -- window height
-    width   = 0.90, -- window width
+    height = 0.95, -- window height
+    width  = 0.90, -- window width
   },
   files = {
     formatter = 'path.filename_first',
@@ -251,10 +245,6 @@ vim.keymap.set('n', '<leader><leader>', '<cmd>FzfLua files<cr>', { desc = 'Find 
 vim.keymap.set('n', '<leader>/', '<cmd>FzfLua live_grep<cr>', { desc = 'Find live grep' })
 vim.keymap.set('n', '<leader>fr', '<cmd>FzfLua resume<cr>', { desc = 'Resume last picker' })
 vim.keymap.set('n', '<leader>,', '<cmd>FzfLua buffers<cr>', { desc = 'Buffers' })
-
-vim.keymap.set('n', 'grr', '<cmd>FzfLua lsp_references<cr>', { desc = 'References' })
-vim.keymap.set('n', 'gri', '<cmd>FzfLua lsp_implementations<cr>', { desc = 'Implementations' })
-vim.keymap.set('n', 'gra', '<cmd>FzfLua lsp_code_actions<cr>', { desc = 'Code actions' })
 
 --Web-devicons
 require('nvim-web-devicons').setup({})
@@ -271,8 +261,18 @@ vim.lsp.enable({
   'lua_ls',
   'ts_ls',
 })
-vim.o.signcolumn = 'yes'
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Go to definition' })
+vim.keymap.set('n', 'gD', vim.lsp.buf.definition, { desc = 'Go to definition' })
+vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, { desc = 'Code actions' })
+vim.keymap.set('n', 'rn', vim.lsp.buf.rename, { desc = 'Rename symbol' })
+vim.keymap.set('n', '<leader>D', function()
+  vim.diagnostic.open_float({ scope = 'line', focus = false })
+end, { desc = 'Line diagnostic float' })
+
+vim.keymap.set('n', 'gd', '<cmd>FzfLua lsp_finder<cr>', { desc = 'Definition + References' })
+vim.keymap.set('n', 'grr', '<cmd>FzfLua lsp_references<cr>', { desc = 'References' })
+vim.keymap.set('n', 'gri', '<cmd>FzfLua lsp_implementations<cr>', { desc = 'Implementations' })
+vim.keymap.set('n', 'gra', '<cmd>FzfLua lsp_code_actions<cr>', { desc = 'Code actions' })
+
 -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', { clear = true }),
@@ -305,9 +305,9 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 --Lazygit
 vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'LazyGit' })
 vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
-	{ desc = 'Open git remote' })
+  { desc = 'Open git remote' })
 
- -- Codediff (vscode like diffs :))
+-- Codediff (vscode like diffs :))
 require("codediff").setup({})
 
 --DAP
@@ -318,22 +318,22 @@ local dashboard = require('alpha.themes.dashboard')
 
 -- 1. Header (ASCII Art)
 dashboard.section.header.val = {
-    [[                               __                ]],
-    [[  ___     ___    ___   __  __ /\_\    ___ ___    ]],
-    [[ / _ `\  / __`\ / __`\/\ \/\ \\/\ \  / __` __`\  ]],
-    [[/\ \/\ \/\  __//\ \_\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
-    [[\ \_\ \_\ \____\ \____/\ \___/  \ \_\ \_\ \_\ \_\]],
-    [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
+  [[                               __                ]],
+  [[  ___     ___    ___   __  __ /\_\    ___ ___    ]],
+  [[ / _ `\  / __`\ / __`\/\ \/\ \\/\ \  / __` __`\  ]],
+  [[/\ \/\ \/\  __//\ \_\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
+  [[\ \_\ \_\ \____\ \____/\ \___/  \ \_\ \_\ \_\ \_\]],
+  [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
 }
 
 -- 2. Buttons (Mapped to your existing config)
 dashboard.section.buttons.val = {
-    dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
-    dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
-    dashboard.button("r", "󰄉  Recent Files", "<cmd>FzfLua oldfiles<CR>"),
-    dashboard.button("g", "󰊢  Git (LazyGit)", "<cmd>LazyGit<CR>"),
-    dashboard.button("s", "  Settings", "<cmd>e $MYVIMRC<CR>"),
-    dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
+  dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
+  dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
+  dashboard.button("r", "󰄉  Recent Files", "<cmd>FzfLua oldfiles<CR>"),
+  dashboard.button("g", "󰊢  Git (LazyGit)", "<cmd>LazyGit<CR>"),
+  dashboard.button("s", "  Settings", "<cmd>e $MYVIMRC<CR>"),
+  dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
 }
 
 -- 3. Footer (Optional: dynamically shows plugin count)
@@ -347,4 +347,3 @@ dashboard.section.buttons.opts.hl = "AlphaButtons"
 dashboard.section.footer.opts.hl = "AlphaFooter"
 
 alpha.setup(dashboard.opts)
-
