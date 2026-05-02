@@ -22,20 +22,19 @@ vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = 'yes'                        --Alwasy show sign column
 vim.o.hlsearch = true                           --Don't highlight serach result
 vim.o.incsearch = true                          --Show matches as you type
--- vim.o.colorcolumn = "100" --Show column at 100 characters
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
-
---Snappy escape
-vim.o.updatetime = 250
+vim.o.updatetime = 250                          -- Snapy key
 vim.o.timeoutlen = 300
-
---How new window appear
-vim.o.splitright = true
+vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
-
---File handling
-vim.o.undofile = true --Persistent undo
-vim.o.autoread = true --Auto reload file if changed outside
+vim.o.undofile = true                           --Persistent undo
+vim.o.autoread = true                           --Auto reload file if changed outside
+vim.o.selection = "inclusive"                   --Use inclusive selection
+vim.o.modifiable = true                         --Allow editing buffers
+vim.o.encoding = "UTF-8"                        --Ut8 encoding
+vim.o.wildmenu = true                           --Enable command line completion menu
+vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
+vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
 
 -- Set undo directory and ensure it exists
 local undodir = "~/.local/share/nvim/undodir"
@@ -45,15 +44,7 @@ if vim.fn.isdirectory(undodir_path) == 0 then
   vim.fn.mkdir(undodir_path, "p")
 end
 
---Behavious setting
-vim.o.selection = "inclusive"        --Use inclusive selection
-vim.o.modifiable = true              --Allow editing buffers
-vim.o.encoding = "UTF-8"             --Ut8 encoding
-vim.o.wildmenu = true                --Enable command line completion menu
-vim.o.wildmode = "longest:full,full" --Completion mode for command-line
-vim.o.wildignorecase = true          --Case-sensitive tab completion in commands
-
---Sync clipboards
+--Behavious setting--Sync clipboards
 vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
 -- Copy to clipboard shortcuts
@@ -76,9 +67,6 @@ vim.diagnostic.config({
   float = { source = 'if_many' },
   jump = { float = true },
 })
-
---Open the config file
---vim.keymap.set('n', '<leader>rc', '<cmd>e $MYVIMRC<cr>', { desc = 'Open config' })
 
 --Buffer navigation
 vim.keymap.set('n', '<leader>bn', '<Cmd>bnext<CR>', { desc = 'Next buffer' })
@@ -255,18 +243,48 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function() pcall(vim.treesitter.start) end,
 })
 
+--Blink
+require('blink.cmp').setup({})
+
+--Oil
+require("oil").setup({
+  view_options = {
+    show_hidden = true,
+  },
+})
+vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+--Lazygit
+vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'LazyGit' })
+vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
+  { desc = 'Open git remote' })
+
+-- LSP Configuration
+vim.lsp.config('lua_ls', {
+  settings = {
+    Lua = {
+      runtime = { version = 'LuaJIT' },
+      workspace = {
+        checkThirdParty = false,
+        library = { vim.env.VIMRUNTIME },
+      },
+      codeLens = { enable = true },
+      hint = { enable = true, semicolon = "Disable" },
+    }
+  }
+})
+
 --LSP
 vim.lsp.enable({
   'ty',
   'lua_ls',
   'ts_ls',
+  'ruff',
 })
 vim.keymap.set('n', 'gD', vim.lsp.buf.definition, { desc = 'Go to definition' })
 vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, { desc = 'Code actions' })
 vim.keymap.set('n', 'rn', vim.lsp.buf.rename, { desc = 'Rename symbol' })
-vim.keymap.set('n', '<leader>D', function()
-  vim.diagnostic.open_float({ scope = 'line', focus = false })
-end, { desc = 'Line diagnostic float' })
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, { desc = 'Hover documentations' })
 
 vim.keymap.set('n', 'gd', '<cmd>FzfLua lsp_finder<cr>', { desc = 'Definition + References' })
 vim.keymap.set('n', 'grr', '<cmd>FzfLua lsp_references<cr>', { desc = 'References' })
@@ -290,22 +308,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end,
 })
-
---Blink
-require('blink.cmp').setup({})
-
---Oil
-require("oil").setup({
-  view_options = {
-    show_hidden = true,
-  },
-})
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-
---Lazygit
-vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'LazyGit' })
-vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
-  { desc = 'Open git remote' })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
