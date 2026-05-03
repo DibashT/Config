@@ -1,0 +1,17 @@
+# Secrets
+.secrets
+.env
+*.key
+*.pem
+
+# SSH keys
+id_rsa
+id_ed25519
+*.pub
+
+# Personal info
+.zsh_history
+.bash_history
+
+# Machine-specific
+.DS_Store
