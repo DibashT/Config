@@ -77,11 +77,11 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.open_float, { desc = 'Show diagn
 vim.keymap.set('n', '<leader>c', ':nohlsearch<CR>', { desc = 'Clear search highlights' })
 
 --Easily move between windows
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+--
 --Better indenting in Visual mode
 vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and reselect' })
 vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and reselect' })
@@ -182,7 +182,23 @@ require("lazy").setup({
       hide_target_hack                 = false,
     },
   },
-
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+    },
+    keys = {
+      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+    },
+  },
   -- Mini plugins
   { "echasnovski/mini.ai",          version = "*", opts = {} },
   { "echasnovski/mini.comment",     version = "*", opts = {} },
@@ -328,7 +344,7 @@ dashboard.section.header.val = {
   [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
 }
 
--- 2. Buttons (Mapped to your existing config)
+-- 2. Buttons
 dashboard.section.buttons.val = {
   dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
   dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
@@ -338,12 +354,12 @@ dashboard.section.buttons.val = {
   dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
 }
 
--- 3. Footer (Optional: dynamically shows plugin count)
+-- 3. Footer
 local stats = require("lazy").stats()
 local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
 dashboard.section.footer.val = "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
 
--- 4. Apply Highlights (Kanagawa compatible)
+-- 4. Highlights (Kanagawa compatible)
 dashboard.section.header.opts.hl = "AlphaHeader"
 dashboard.section.buttons.opts.hl = "AlphaButtons"
 dashboard.section.footer.opts.hl = "AlphaFooter"
