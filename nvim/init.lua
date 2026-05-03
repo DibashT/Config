@@ -154,7 +154,25 @@ require("lazy").setup({
   'MeanderingProgrammer/render-markdown.nvim',
   'goolord/alpha-nvim',
   'nvim-tree/nvim-web-devicons',
-  'rebelot/kanagawa.nvim',
+  -- 'rebelot/kanagawa.nvim',
+  {
+    'rebelot/kanagawa.nvim',
+    priority = 1000, -- Ensure it loads first
+    config = function()
+      require('kanagawa').setup({
+        colors = {
+          theme = {
+            all = {
+              ui = {
+                bg_gutter = "none"
+              }
+            }
+          }
+        }
+      })
+      vim.cmd('colorscheme kanagawa-dragon')
+    end,
+  },
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -212,19 +230,19 @@ require("lazy").setup({
   { "echasnovski/mini.notify",      version = "*", opts = {} },
 })
 
---Kanagawa
-require('kanagawa').setup({
-  colors = {
-    theme = {
-      all = {
-        ui = {
-          bg_gutter = "none"
-        }
-      }
-    }
-  }
-})
-vim.cmd('colorscheme kanagawa-wave')
+--Kanagawa apply after 0.12
+-- require('kanagawa').setup({
+--   colors = {
+--     theme = {
+--       all = {
+--         ui = {
+--           bg_gutter = "none"
+--         }
+--       }
+--     }
+--   }
+-- })
+-- vim.cmd('colorscheme kanagawa-wave')
 
 --Markdown
 require('render-markdown').setup({})
@@ -258,6 +276,7 @@ vim.cmd('syntax off')
 vim.api.nvim_create_autocmd('FileType', {
   callback = function() pcall(vim.treesitter.start) end,
 })
+vim.cmd('syntax off')
 
 --Blink
 require('blink.cmp').setup({})
