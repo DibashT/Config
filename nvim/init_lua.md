@@ -44,7 +44,7 @@ if vim.fn.isdirectory(undodir_path) == 0 then
   vim.fn.mkdir(undodir_path, "p")
 end
 
---Behavious setting
+--Behaviour setting
 vim.o.selection = "inclusive"        --Use inclusive selection
 vim.o.modifiable = true              --Allow editing buffers
 vim.o.encoding = "UTF-8"             --Ut8 encoding
