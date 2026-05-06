@@ -20,7 +20,7 @@ vim.o.spelllang = "en"                          -- spell check
 vim.o.cmdheight = 1                             --command line height
 vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = "yes"                        --Alwasy show sign column
-vim.o.hlsearch = true                           --Don't highlight serach result
+vim.o.hlsearch = true                           --highlight serach result
 vim.o.incsearch = true                          --Show matches as you type
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
 vim.o.updatetime = 250                          -- Snapy key
@@ -80,12 +80,6 @@ vim.keymap.set("n", "<leader>bp", "<Cmd>bprevious<CR>", { desc = "Previous buffe
 vim.keymap.set("n", "<leader>q", vim.diagnostic.open_float, { desc = "Show diagnostic" })
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
 
---Easily move between windows
--- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
--- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
--- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
--- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
---
 --Better indenting in Visual mode
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
@@ -159,13 +153,62 @@ require("lazy").setup({
       "mason-org/mason-lspconfig.nvim",
     },
   },
+  {
+    "mfussenegger/nvim-dap",
+    config = function()
+      local dap = require("dap")
+
+      dap.adapters.debugpy = function(cb, config)
+        if config.request == "attach" then
+          cb({
+            type = "server",
+            port = config.connect.port,
+            host = config.connect.host or "127.0.0.1",
+          })
+        else
+          cb({
+            type = "executable",
+            command = "debugpy-adapter",
+          })
+        end
+      end
+
+      dap.configurations.python = {
+        {
+          type = "debugpy",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          python = function()
+            local root = vim.fs.root(0, ".venv")
+            return root and (root .. "/.venv/bin/python") or "python3"
+          end,
+          cwd = function()
+            return vim.fs.root(0, ".venv") or vim.fn.getcwd()
+          end,
+        },
+      }
+
+      vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
+      vim.keymap.set("n", "<leader>dc", dap.continue)
+      vim.keymap.set("n", "<leader>dq", dap.terminate)
+      vim.keymap.set("n", "<leader>dr", dap.repl.open)
+      vim.keymap.set("n", "<leader>dl", dap.run_last)
+      vim.keymap.set({ "n", "v" }, "<leader>dh", function()
+        require("dap.ui.widgets").hover()
+      end)
+      vim.keymap.set("n", "<Down>", dap.step_over)
+      vim.keymap.set("n", "<Right>", dap.step_into)
+      vim.keymap.set("n", "<Left>", dap.step_out)
+      vim.keymap.set("n", "<Up>", dap.restart_frame)
+    end,
+  },
   "stevearc/oil.nvim",
   "kdheepak/lazygit.nvim",
   "esmuellert/codediff.nvim",
   "MeanderingProgrammer/render-markdown.nvim",
   "goolord/alpha-nvim",
   "nvim-tree/nvim-web-devicons",
-  -- 'rebelot/kanagawa.nvim',
   {
     "rebelot/kanagawa.nvim",
     lazy = false,
@@ -185,6 +228,7 @@ require("lazy").setup({
       vim.cmd.colorscheme("kanagawa-wave")
     end,
   },
+  { "saghen/blink.cmp",                version = "*" },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -196,7 +240,6 @@ require("lazy").setup({
       },
     },
   },
-  { "saghen/blink.cmp",                version = "*" },
   -- Cursor animations
   {
     "sphamba/smear-cursor.nvim",
@@ -285,7 +328,6 @@ vim.keymap.set("n", "<leader>,", "<cmd>FzfLua buffers<cr>", { desc = "Buffers" }
 require("nvim-web-devicons").setup({})
 
 --Tree_sitter
-vim.cmd("syntax off")
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     pcall(vim.treesitter.start)
@@ -319,19 +361,20 @@ vim.lsp.config("lua_ls", {
         checkThirdParty = false,
         library = { vim.env.VIMRUNTIME },
       },
+      diagnostic = { globals = { "vim" } },
       codeLens = { enable = true },
       hint = { enable = true, semicolon = "Disable" },
     },
   },
 })
 
---LSP
+-- LSP
 vim.lsp.enable({
   "ty",
   "lua_ls",
   "ts_ls",
-  "ruff",
 })
+
 vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
 vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
@@ -342,7 +385,7 @@ vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "Reference
 vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
 vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
 
--- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
+-- -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("my.lsp", { clear = true }),
   callback = function(ev)
@@ -364,8 +407,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
-
---DAP
 
 --Nevim home screen
 local alpha = require("alpha")
@@ -404,37 +445,35 @@ dashboard.section.footer.opts.hl = "AlphaFooter"
 alpha.setup(dashboard.opts)
 
 --Leap.nvim configuration
-require('leap').opts.safe_labels = {} -- Jump immediately to single matches
-require('leap').opts.labels = { 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o',
-  'p' }
+require("leap").opts.safe_labels = {} -- Jump immediately to single matches
+require("leap").opts.labels =
+{ "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
 
 -- Basic bidirectional leap motions
-vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
-vim.keymap.set({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-backward)')
+vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
+vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
 
--- Remote operations (yank/delete from anywhere on screen)
 -- Usage: gs{leap}yap yanks a paragraph at the leap target
-vim.keymap.set({ 'n', 'o' }, 'gs', '<Plug>(leap-remote)')
-vim.keymap.set({ 'n', 'o' }, 'gS', '<Plug>(leap-remote-linewise)')
+vim.keymap.set({ "n", "o" }, "gs", "<Plug>(leap-remote)")
+vim.keymap.set({ "n", "o" }, "gS", "<Plug>(leap-remote-linewise)")
 
--- Optional: Treesitter parent node selection
 -- Usage: van{label} or vannny to select treesitter nodes
-vim.keymap.set({ 'x', 'o' }, 'an', function()
-  require('leap.treesitter').select {
-    opts = require('leap.user').with_traversal_keys('n', 'N')
-  }
+vim.keymap.set({ "x", "o" }, "an", function()
+  require("leap.treesitter").select({
+    opts = require("leap.user").with_traversal_keys("n", "N"),
+  })
 end)
 
 -- Optional: Automatic paste after remote yank
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'RemoteOperationDone',
-  group = vim.api.nvim_create_augroup('LeapRemote', {}),
+vim.api.nvim_create_autocmd("User", {
+  pattern = "RemoteOperationDone",
+  group = vim.api.nvim_create_augroup("LeapRemote", {}),
   callback = function(event)
-    if vim.v.operator == 'y' and event.data.register == '"' then
-      vim.cmd('normal! p')
+    if vim.v.operator == "y" and event.data.register == '"' then
+      vim.cmd("normal! p")
     end
   end,
 })
 
 -- Reduce visual noise (recommended)
-vim.api.nvim_set_hl(0, 'LeapBackdrop', { link = 'Comment' })
+vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
