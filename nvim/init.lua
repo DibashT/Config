@@ -212,7 +212,7 @@ require("lazy").setup({
   {
     "rebelot/kanagawa.nvim",
     lazy = false,
-    priority = 1000, -- Ensure it loads first
+    -- priority = 1000, -- Ensure it loads first
     config = function()
       require("kanagawa").setup({
         colors = {
@@ -336,12 +336,27 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.cmd("syntax off")
 
 --Blink
-require("blink.cmp").setup({})
+require('blink.cmp').setup({
+  signature = {
+    enabled = true,
+    window = { show_documentation = false },
+  },
+})
 
 --Oil
 require("oil").setup({
+  -- columns = { "mtime" },
+  delete_to_trash = true,
+  columns = {
+    "icon",
+    "mtime",
+  },
   view_options = {
     show_hidden = true,
+    sort = {
+      { "type",  "asc" },
+      { "mtime", "desc" },
+    }
   },
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
