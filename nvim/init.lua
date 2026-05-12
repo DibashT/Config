@@ -49,6 +49,8 @@ vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
 end)
 
+vim.o.swapfile = false --Disable swap file to prevent annoying errors
+
 -- Copy to clipboard shortcuts
 vim.keymap.set("n", "<leader>cp", function()
   local path = vim.fn.expand("%:p")
@@ -62,10 +64,9 @@ vim.keymap.set("n", "<leader>cr", function()
   vim.notify("Copied: " .. path)
 end, { desc = "Copy relative path" })
 
-vim.o.swapfile = false --Disable swap file to prevent annoying errors
-
 --Vim diagnostic
 vim.diagnostic.config({
+  virtual_text = false,
   severity_sort = true,
   update_in_insert = false,
   float = { source = "if_many" },
@@ -248,8 +249,8 @@ require("lazy").setup({
       smear_between_neighbor_lines = true,
       scroll_buffer_space = true,
       legacy_computing_symbols_support = true,
-      stiffness = 0.5,
-      trailing_stiffness = 0.3,
+      stiffness = 0.6,
+      trailing_stiffness = 0.4,
       distance_stop_animating = 0.1,
       smear_to_cmd = true,
       hide_target_hack = false,
@@ -277,10 +278,10 @@ require("lazy").setup({
   { "echasnovski/mini.comment",                      version = "*", opts = {} },
   { "echasnovski/mini.move",                         version = "*", opts = {} },
   { "echasnovski/mini.surround",                     version = "*", opts = {} },
-  { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
+  -- { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
   { "echasnovski/mini.indentscope",                  version = "*", opts = {} },
   { "echasnovski/mini.pairs",                        version = "*", opts = {} },
-  { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
+  -- { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
   { "echasnovski/mini.bufremove",                    version = "*", opts = {} },
   { "echasnovski/mini.notify",                       version = "*", opts = {} },
   { url = "https://codeberg.org/andyg/leap.nvim.git" },
