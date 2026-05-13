@@ -256,23 +256,23 @@ require("lazy").setup({
       hide_target_hack = false,
     },
   },
-  {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-    },
-    keys = {
-      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-    },
-  },
+  -- {
+  --   "christoomey/vim-tmux-navigator",
+  --   cmd = {
+  --     "TmuxNavigateLeft",
+  --     "TmuxNavigateDown",
+  --     "TmuxNavigateUp",
+  --     "TmuxNavigateRight",
+  --     "TmuxNavigatePrevious",
+  --   },
+  --   keys = {
+  --     { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
+  --     { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
+  --     { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
+  --     { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
+  --     { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+  --   },
+  -- },
   -- Mini plugins
   { "echasnovski/mini.ai",                           version = "*", opts = {} },
   { "echasnovski/mini.comment",                      version = "*", opts = {} },
@@ -423,6 +423,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
+vim.keymap.set('n', '<leader>ru', '<cmd>CodeDiff<cr>', { desc = 'Code diff not staged' })
+vim.keymap.set('n', '<leader>rm', '<cmd>CodeDiff main<cr>', { desc = 'Code diff main' })
+vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code diff previous commit' })
 
 --Nevim home screen
 local alpha = require("alpha")
