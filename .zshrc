@@ -115,3 +115,4 @@ source <(fzf --zsh)
 alias vim='nvim'
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export TERM=xterm-ghostty
