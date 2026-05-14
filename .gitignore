@@ -1,17 +1,29 @@
-# Secrets
+# --- Secrets & Credentials ---
 .secrets
 .env
 *.key
 *.pem
+token.txt
 
-# SSH keys
+# --- SSH Keys (Strict) ---
 id_rsa
 id_ed25519
+id_ecdsa
 *.pub
 
-# Personal info
+# --- History & Privacy ---
 .zsh_history
 .bash_history
+.python_history
+.node_repl_history
 
-# Machine-specific
+# --- Editor Junk ---
+*.swp
+*.swo
+.netrwhist
 .DS_Store
+Thumbs.db
+
+# --- Shell / App State ---
+.zcompdump*
+.cache/

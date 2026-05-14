@@ -314,7 +314,6 @@ require('blink.cmp').setup({
 
 --Oil
 require("oil").setup({
-  -- columns = { "mtime" },
   delete_to_trash = true,
   columns = {
     "icon",
