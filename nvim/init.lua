@@ -229,7 +229,7 @@ require("lazy").setup({
       vim.cmd.colorscheme("kanagawa-wave")
     end,
   },
-  { "saghen/blink.cmp",                version = "*" },
+  { "saghen/blink.cmp",                              version = "*" },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -268,6 +268,43 @@ require("lazy").setup({
 --   }
 -- })
 -- vim.cmd('colorscheme kanagawa-wave')
+
+-- Treesitter
+-- require("nvim-treesitter.configs").setup({
+--   ensure_installed = {
+--     "lua",
+--     "vim",
+--     "vimdoc",
+--     "query",
+--
+--     "python",
+--     "javascript",
+--     "typescript",
+--     "tsx",
+--
+--     "html",
+--     "css",
+--     "json",
+--     "yaml",
+--
+--     "bash",
+--     "markdown",
+--     "markdown_inline",
+--
+--     "c",
+--     "cpp",
+--   },
+--
+--   auto_install = true,
+--
+--   highlight = {
+--     enable = true,
+--   },
+--
+--   indent = {
+--     enable = true,
+--   },
+-- })
 
 --Markdown
 require("render-markdown").setup({})
@@ -354,6 +391,7 @@ vim.lsp.config("lua_ls", {
 -- LSP
 vim.lsp.enable({
   "ty",
+  "ruff",
   "lua_ls",
   "ts_ls",
 })

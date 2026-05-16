@@ -1,15 +1,17 @@
 # --- Secrets & Credentials ---
 .secrets
 .env
+.env.*
 *.key
 *.pem
+*.p12
+*.pfx
 token.txt
 
-# --- SSH Keys (Strict) ---
+# --- SSH Keys ---
 id_rsa
 id_ed25519
 id_ecdsa
-*.pub
 
 # --- History & Privacy ---
 .zsh_history
@@ -25,5 +27,13 @@ id_ecdsa
 Thumbs.db
 
 # --- Shell / App State ---
+**/.cache/
 .zcompdump*
-.cache/
+
+# --- Direnv ---
+.envrc
+direnv/
+
+# --- Neovim ---
+.nvim/
+shada/

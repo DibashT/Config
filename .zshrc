@@ -1,11 +1,11 @@
-# --- 1. ENVIRONMENT ---
+# --- ENVIRONMENT ---
 export ZSH="$HOME/.oh-my-zsh"
 export EDITOR='nvim'
 export VISUAL='nvim'
 export TERM="xterm-ghostty"
 export LANG="en_US.UTF-8"
 
-# --- 2. PATH (Deduplicated) ---
+# --- PATH (Deduplicated) ---
 typeset -U path
 path=(
   "$HOME/bin"
@@ -16,7 +16,7 @@ path=(
 )
 export PATH
 
-# --- 3. OH MY ZSH SETUP ---
+# ---  OH MY ZSH SETUP ---
 ZSH_THEME="robbyrussell"
 
 # Note: Ensure autosuggestions & syntax-highlighting are cloned to $ZSH_CUSTOM/plugins
@@ -28,7 +28,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# --- 4. HISTORY SETTINGS ---
+# --- HISTORY SETTINGS ---
 HISTSIZE=100000
 SAVEHIST=100000
 HISTFILE=~/.zsh_history
@@ -39,7 +39,7 @@ setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS      
 setopt HIST_REDUCE_BLANKS
 
-# --- 5. FZF & FD INTEGRATION ---
+# --- FZF & FD INTEGRATION ---
 if command -v fzf >/dev/null; then
   source <(fzf --zsh)
   
@@ -51,7 +51,7 @@ if command -v fzf >/dev/null; then
   export FZF_CTRL_T_OPTS="--preview 'bat --color=always --style=numbers --line-range=:300 {}'"
 fi
 
-# --- 6. ALIASES ---
+# --- ALIASES ---
 alias vim='nvim'
 alias zshconfig="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
