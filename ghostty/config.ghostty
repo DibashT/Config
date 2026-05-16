@@ -1,0 +1,28 @@
+font-family = "JetBrainsMono Nerd Font"
+theme = "Kanagawa Wave"
+background-opacity = 1 
+background-blur = true 
+font-size = 12
+
+# Navigation keybinds
+# keybind = alt+h=goto_split:left
+# keybind = alt+j=goto_split:bottom
+# keybind = alt+k=goto_split:top
+# keybind = alt+l=goto_split:right
+
+# Split creation keybinds
+# keybind = alt+shift+h=new_split:left
+# keybind = alt+shift+j=new_split:down
+# keybind = alt+shift+k=new_split:up
+# keybind = alt+shift+l=new_split:right
+
+# Arrow key bindings
+# keybind = alt+up=esc:[1;3A
+# keybind = alt+down=esc:[1;3B
+# keybind = alt+left=esc:[1;3D
+# keybind = alt+right=esc:[1;3C
+
+mouse-hide-while-typing = true
+title = " "
+custom-shader = ~/.config/ghostty/shaders/cursor.glsl
+clipboard-write = allow
