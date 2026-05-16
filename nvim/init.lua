@@ -229,7 +229,7 @@ require("lazy").setup({
       vim.cmd.colorscheme("kanagawa-wave")
     end,
   },
-  { "saghen/blink.cmp",                              version = "*" },
+  { "saghen/blink.cmp",                version = "*" },
   {
     "nvim-lualine/lualine.nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -390,7 +390,7 @@ vim.lsp.config("lua_ls", {
 
 -- LSP
 vim.lsp.enable({
-  "ty",
+  "ty", --uv
   "ruff",
   "lua_ls",
   "ts_ls",
