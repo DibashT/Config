@@ -1,3 +1,4 @@
+
 --Set LeadeR
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -49,6 +50,8 @@ vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
 end)
 
+vim.o.swapfile = false --Disable swap file to prevent annoying errors
+
 -- Copy to clipboard shortcuts
 vim.keymap.set("n", "<leader>cp", function()
   local path = vim.fn.expand("%:p")
@@ -62,10 +65,9 @@ vim.keymap.set("n", "<leader>cr", function()
   vim.notify("Copied: " .. path)
 end, { desc = "Copy relative path" })
 
-vim.o.swapfile = false --Disable swap file to prevent annoying errors
-
 --Vim diagnostic
 vim.diagnostic.config({
+  virtual_text = false,
   severity_sort = true,
   update_in_insert = false,
   float = { source = "if_many" },
@@ -240,47 +242,15 @@ require("lazy").setup({
       },
     },
   },
-  -- Cursor animations
-  {
-    "sphamba/smear-cursor.nvim",
-    opts = {
-      smear_between_buffers = true,
-      smear_between_neighbor_lines = true,
-      scroll_buffer_space = true,
-      legacy_computing_symbols_support = true,
-      stiffness = 0.5,
-      trailing_stiffness = 0.3,
-      distance_stop_animating = 0.1,
-      smear_to_cmd = true,
-      hide_target_hack = false,
-    },
-  },
-  {
-    "christoomey/vim-tmux-navigator",
-    cmd = {
-      "TmuxNavigateLeft",
-      "TmuxNavigateDown",
-      "TmuxNavigateUp",
-      "TmuxNavigateRight",
-      "TmuxNavigatePrevious",
-    },
-    keys = {
-      { "<c-h>",  "<cmd><C-U>TmuxNavigateLeft<cr>" },
-      { "<c-j>",  "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>",  "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>",  "<cmd><C-U>TmuxNavigateRight<cr>" },
-      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-    },
-  },
   -- Mini plugins
   { "echasnovski/mini.ai",                           version = "*", opts = {} },
   { "echasnovski/mini.comment",                      version = "*", opts = {} },
   { "echasnovski/mini.move",                         version = "*", opts = {} },
   { "echasnovski/mini.surround",                     version = "*", opts = {} },
-  { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
+  -- { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
   { "echasnovski/mini.indentscope",                  version = "*", opts = {} },
   { "echasnovski/mini.pairs",                        version = "*", opts = {} },
-  { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
+  -- { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
   { "echasnovski/mini.bufremove",                    version = "*", opts = {} },
   { "echasnovski/mini.notify",                       version = "*", opts = {} },
   { url = "https://codeberg.org/andyg/leap.nvim.git" },
@@ -299,6 +269,43 @@ require("lazy").setup({
 --   }
 -- })
 -- vim.cmd('colorscheme kanagawa-wave')
+
+-- Treesitter
+-- require("nvim-treesitter.configs").setup({
+--   ensure_installed = {
+--     "lua",
+--     "vim",
+--     "vimdoc",
+--     "query",
+--
+--     "python",
+--     "javascript",
+--     "typescript",
+--     "tsx",
+--
+--     "html",
+--     "css",
+--     "json",
+--     "yaml",
+--
+--     "bash",
+--     "markdown",
+--     "markdown_inline",
+--
+--     "c",
+--     "cpp",
+--   },
+--
+--   auto_install = true,
+--
+--   highlight = {
+--     enable = true,
+--   },
+--
+--   indent = {
+--     enable = true,
+--   },
+-- })
 
 --Markdown
 require("render-markdown").setup({})
@@ -345,7 +352,6 @@ require('blink.cmp').setup({
 
 --Oil
 require("oil").setup({
-  -- columns = { "mtime" },
   delete_to_trash = true,
   columns = {
     "icon",
@@ -385,7 +391,8 @@ vim.lsp.config("lua_ls", {
 
 -- LSP
 vim.lsp.enable({
-  "ty",
+  "ty", --uv
+  "ruff",
   "lua_ls",
   "ts_ls",
 })
@@ -422,6 +429,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
+vim.keymap.set('n', '<leader>ru', '<cmd>CodeDiff<cr>', { desc = 'Code diff not staged' })
+vim.keymap.set('n', '<leader>rm', '<cmd>CodeDiff main<cr>', { desc = 'Code diff main' })
+vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code diff previous commit' })
 
 --Nevim home screen
 local alpha = require("alpha")
