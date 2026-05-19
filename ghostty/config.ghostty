@@ -1,8 +1,9 @@
 font-family = "JetBrainsMono Nerd Font"
 theme = "Kanagawa Wave"
-background-opacity = 1 
+background-opacity = 0.80 
 background-blur = true 
-font-size = 11.5
+font-size = 12
+scrollbar = never
 
 # Navigation keybinds
 # keybind = alt+h=goto_split:left
