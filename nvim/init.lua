@@ -387,8 +387,8 @@ vim.cmd("syntax off")
 
 -- LSP
 vim.lsp.enable({
-  'ty',    -- also $ uv tool install ty@latest
-  'ruff',  -- also $ uv tool install ruff@latest
+  'ty',     -- also $ uv tool install ty@latest
+  'ruff',   -- also $ uv tool install ruff@latest
   'lua_ls', -- also $ brew install lua-language-server
   'ts_ls'
 })
@@ -594,7 +594,8 @@ alpha.setup(dashboard.opts)
 --Leap.nvim configuration
 require("leap").opts.safe_labels = {} -- Jump immediately to single matches
 require("leap").opts.labels =
-{ "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
+-- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
+{ "a", "s", "d", "f", "g", "h", "j", "k", "l", ";" }
 
 -- Basic bidirectional leap motions
 vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")

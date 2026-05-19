@@ -36,7 +36,7 @@ window#waybar {
     border-radius: 50%;
     /* background-color: @base; */
     margin: 0px 0px;
-    padding: 4 6 2 0;
+    padding: 4px 6px 2px 0px;
 }
 
 #workspaces button:hover {
