@@ -1,6 +1,6 @@
 font-family = "JetBrainsMono Nerd Font"
 theme = "Kanagawa Wave"
-background-opacity = 0.80 
+background-opacity = 0.90 
 background-blur = true 
 font-size = 12
 scrollbar = never
