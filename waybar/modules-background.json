@@ -91,7 +91,7 @@
             "(.*) Microsoft Teams": "$1"
         },
         "separate-outputs": true,
-      "format": "<span color=\"#24273a\" size=\"smaller\">{}</span>"
+      "format": "<span color=\"#24273a\" size=\"medium\">{}</span>"
       // or size=\"larger\", size=\"x-large\", etc.
   },
   "idle_inhibitor": {
@@ -102,8 +102,8 @@
     }
   },
   "tray": {
-    // "icon-size": 14,
-    "spacing": 5
+    "icon-size": 15,
+    "spacing": 4
   },
   "clock": {
     "tooltip-format": "<tt><small>{calendar}</small></tt>",
@@ -129,9 +129,9 @@
       "on-scroll-down": "shift_down"
     },
       //12 hour format
-     //"format": "{:%a %d %b | %I :%M %p}", 
-    "format": "{:%a %d %b | %H :%M}",
-    "format-alt": " {:%Y -%m -%d    %H :%M :%S}",
+     //"format": "{:%a %d %b | %I : %M %p}", 
+    "format": "{:%a %d %b | %H : %M}",
+    "format-alt": " {:%Y - %m - %d    %H : %M : %S}",
     "interval": 1
   },
 
@@ -157,7 +157,7 @@
   },
   // Harddisc space used
   "disk": {
-    // "interval": 30,
+    "interval": 30,
     "format": " {percentage_used}% ",
     "path": "/",
     //"on-click": "ghostty -e htop"
@@ -181,7 +181,7 @@
     },
   "backlight": {
     // "device": "acpi_video1",
-    "format": "{icon}{percent: >3}%",
+    "format": "{icon} {percent: >3}%",
     // "format-icons": ["", ""],
         "format-icons": ["", "", "", "", "", "", "", "", ""],
     "on-scroll-down": "brightnessctl -c backlight set 5%-",
@@ -215,7 +215,8 @@
     "tooltip-format-wifi": " {essid} ({signalStrength}%)",
     "tooltip-format-ethernet": " {ifname} ({ipaddr}/{cidr})",
     "tooltip-format-disconnected": "⚠ Disconnected",
-    // "on-click": "ghostty -e nmtui"
+    //"on-click": "ghostty -e nmtui",
+    //"on-click": "/usr/bin/ghostty -e nmtui",
     "on-click": "nm-connection-editor"
   },
   "pulseaudio": {

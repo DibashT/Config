@@ -349,7 +349,7 @@ window#waybar.empty #window {
   * {
       color: #c8b9a9;
       font-family: Ubuntu Mono, sans-serif;
-      font-size: 14px;
+      font-size: 15px;
   }
   
   #workspaces button.focused {
