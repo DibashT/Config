@@ -28,16 +28,23 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# --- HISTORY SETTINGS ---
+ # --- HISTORY SETTINGS ---
 HISTSIZE=100000
 SAVEHIST=100000
 HISTFILE=~/.zsh_history
 
-setopt EXTENDED_HISTORY      
-setopt INC_APPEND_HISTORY    
-setopt SHARE_HISTORY         
-setopt HIST_IGNORE_DUPS      
-setopt HIST_REDUCE_BLANKS
+# Core history sharing options
+setopt SHARE_HISTORY              # Share history across all sessions
+setopt INC_APPEND_HISTORY         # Write immediately, don't wait for shell exit
+setopt EXTENDED_HISTORY           # Record timestamp and duration
+
+# History quality options
+setopt HIST_IGNORE_DUPS           # Don't record duplicate consecutive commands
+setopt HIST_IGNORE_ALL_DUPS       # Delete old duplicates when adding new
+setopt HIST_FIND_NO_DUPS          # Don't show duplicates when searching
+setopt HIST_EXPIRE_DUPS_FIRST     # Expire duplicates first when trimming
+setopt HIST_REDUCE_BLANKS         # Remove superfluous blanks
+setopt HIST_VERIFY                # Show command with history expansion before running 
 
 # --- FZF & FD INTEGRATION ---
 if command -v fzf >/dev/null; then
