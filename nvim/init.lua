@@ -115,131 +115,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
---For 0.11.7 version Plugin required for lazy.vim
--- local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
--- if not vim.loop.fs_stat(lazypath) then
---   vim.fn.system({
---     "git",
---     "clone",
---     "--filter=blob:none",
---     "https://github.com/folke/lazy.nvim.git",
---     "--branch=stable",
---     lazypath,
---   })
--- end
--- vim.opt.rtp:prepend(lazypath)
---
--- require("lazy").setup({
---   "ibhagwan/fzf-lua",
---   { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
---   {
---     "neovim/nvim-lspconfig",
---     dependencies = {
---       { "mason-org/mason.nvim", opts = {} },
---       "mason-org/mason-lspconfig.nvim",
---     },
---   },
---   {
---     "mfussenegger/nvim-dap",
---     config = function()
---       local dap = require("dap")
---
---       dap.adapters.debugpy = function(cb, config)
---         if config.request == "attach" then
---           cb({
---             type = "server",
---             port = config.connect.port,
---             host = config.connect.host or "127.0.0.1",
---           })
---         else
---           cb({
---             type = "executable",
---             command = "debugpy-adapter",
---           })
---         end
---       end
---
---       dap.configurations.python = {
---         {
---           type = "debugpy",
---           request = "launch",
---           name = "Launch file",
---           program = "${file}",
---           python = function()
---             local root = vim.fs.root(0, ".venv")
---             return root and (root .. "/.venv/bin/python") or "python3"
---           end,
---           cwd = function()
---             return vim.fs.root(0, ".venv") or vim.fn.getcwd()
---           end,
---         },
---       }
---
---       vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
---       vim.keymap.set("n", "<leader>dc", dap.continue)
---       vim.keymap.set("n", "<leader>dq", dap.terminate)
---       vim.keymap.set("n", "<leader>dr", dap.repl.open)
---       vim.keymap.set("n", "<leader>dl", dap.run_last)
---       vim.keymap.set({ "n", "v" }, "<leader>dh", function()
---         require("dap.ui.widgets").hover()
---       end)
---       vim.keymap.set("n", "<Down>", dap.step_over)
---       vim.keymap.set("n", "<Right>", dap.step_into)
---       vim.keymap.set("n", "<Left>", dap.step_out)
---       vim.keymap.set("n", "<Up>", dap.restart_frame)
---     end,
---   },
---   "stevearc/oil.nvim",
---   "kdheepak/lazygit.nvim",
---   "esmuellert/codediff.nvim",
---   "MeanderingProgrammer/render-markdown.nvim",
---   "goolord/alpha-nvim",
---   "nvim-tree/nvim-web-devicons",
---   {
---     "rebelot/kanagawa.nvim",
---     lazy = false,
---     -- priority = 1000, -- Ensure it loads first
---     config = function()
---       require("kanagawa").setup({
---         colors = {
---           theme = {
---             all = {
---               ui = {
---                 bg_gutter = "none",
---               },
---             },
---           },
---         },
---       })
---       vim.cmd.colorscheme("kanagawa-wave")
---     end,
---   },
---   { "saghen/blink.cmp",                version = "*" },
---   {
---     "nvim-lualine/lualine.nvim",
---     dependencies = { "nvim-tree/nvim-web-devicons" },
---     opts = {
---       options = {
---         theme = "kanagawa",
---         component_separators = "|",
---         section_separators = { left = "", right = "" },
---       },
---     },
---   },
---   -- Mini plugins
---   { "echasnovski/mini.ai",                           version = "*", opts = {} },
---   { "echasnovski/mini.comment",                      version = "*", opts = {} },
---   { "echasnovski/mini.move",                         version = "*", opts = {} },
---   { "echasnovski/mini.surround",                     version = "*", opts = {} },
---   -- { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
---   { "echasnovski/mini.indentscope",                  version = "*", opts = {} },
---   { "echasnovski/mini.pairs",                        version = "*", opts = {} },
---   -- { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
---   { "echasnovski/mini.bufremove",                    version = "*", opts = {} },
---   { "echasnovski/mini.notify",                       version = "*", opts = {} },
---   { url = "https://codeberg.org/andyg/leap.nvim.git" },
--- })
-
+--https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack#update
 vim.pack.add({
   'https://github.com/ibhagwan/fzf-lua',
   'https://github.com/nvim-treesitter/nvim-treesitter',
@@ -355,6 +231,7 @@ require("mini.notify").setup({})
 
 --Fzf-lua
 require("fzf-lua").setup({
+  ui_select = true,
   keymap = {
     builtin = {
       ["<C-d>"] = "preview-page-down",
@@ -493,60 +370,6 @@ vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
 vim.keymap.set("n", "<leader>gb", function()
   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
 end, { desc = "Open git remote" })
-
--- LSP Configuration
--- vim.lsp.config("lua_ls", {
---   settings = {
---     Lua = {
---       runtime = { version = "LuaJIT" },
---       workspace = {
---         checkThirdParty = false,
---         library = { vim.env.VIMRUNTIME },
---       },
---       diagnostic = { globals = { "vim" } },
---       codeLens = { enable = true },
---       hint = { enable = true, semicolon = "Disable" },
---     },
---   },
--- })
-
--- LSP
--- vim.lsp.enable({
---   "ty", --uv
---   "ruff",
---   "lua_ls",
---   "ts_ls",
--- })
---
--- vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
--- vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
--- vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
--- vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
---
--- vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_finder<cr>", { desc = "Definition + References" })
--- vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "References" })
--- vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
--- vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
---
--- -- -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
--- vim.api.nvim_create_autocmd("LspAttach", {
---   group = vim.api.nvim_create_augroup("my.lsp", { clear = true }),
---   callback = function(ev)
---     local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
---     if
---         not client:supports_method("textDocument/willSaveWaitUntil")
---         and client:supports_method("textDocument/formatting")
---     then
---       vim.api.nvim_create_autocmd("BufWritePre", {
---         group = vim.api.nvim_create_augroup("my.lsp.fmt", { clear = false }),
---         buffer = ev.buf,
---         callback = function()
---           vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
---         end,
---       })
---     end
---   end,
--- })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})

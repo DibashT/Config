@@ -91,7 +91,7 @@
             "(.*) Microsoft Teams": "$1"
         },
         "separate-outputs": true,
-    "format": "<span color=\"#24273a\" size=\"medium\">{}</span>"
+    "format": "<span color=\"#24273a\" size=\"small\">{}</span>"
   },
   "idle_inhibitor": {
     "format": "{icon}",
@@ -130,7 +130,7 @@
     // 12 hour format
     // "format": "{:%a %d %b | %I : %M %p}", 
     "format": "{:%a %d %b | %H : %M}",
-    "format-alt": " {:%Y - %m - %d    %H : %M : %S}",
+    "format-alt": " {:%Y -%m -%d |  %H : %M : %S}",
     "interval": 1
   },
 
