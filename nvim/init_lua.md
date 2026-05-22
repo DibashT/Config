@@ -1,4 +1,3 @@
-
 --Set LeadeR
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -116,159 +115,60 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
--- --Plugins for nvim 0.12.X onward
--- vim.pack.add({
---   'https://github.com/ibhagwan/fzf-lua',
---   'https://github.com/nvim-treesitter/nvim-treesitter',
---   'https://github.com/neovim/nvim-lspconfig',
---   'https://github.com/stevearc/oil.nvim',
---   'https://github.com/kdheepak/lazygit.nvim',
---   'https://github.com/esmuellert/codediff.nvim',
---   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
---   'https://github.com/goolord/alpha-nvim',
---   'https://github.com/nvim-tree/nvim-web-devicons',
---   'https://github.com/rebelot/kanagawa.nvim',
---   { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }, -- pinning so rust binary dependency automatically downloads
--- })
-
---For 0.11.7 version Plugin required for lazy.vim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
-require("lazy").setup({
-  "ibhagwan/fzf-lua",
-  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      { "mason-org/mason.nvim", opts = {} },
-      "mason-org/mason-lspconfig.nvim",
-    },
-  },
-  {
-    "mfussenegger/nvim-dap",
-    config = function()
-      local dap = require("dap")
-
-      dap.adapters.debugpy = function(cb, config)
-        if config.request == "attach" then
-          cb({
-            type = "server",
-            port = config.connect.port,
-            host = config.connect.host or "127.0.0.1",
-          })
-        else
-          cb({
-            type = "executable",
-            command = "debugpy-adapter",
-          })
-        end
-      end
-
-      dap.configurations.python = {
-        {
-          type = "debugpy",
-          request = "launch",
-          name = "Launch file",
-          program = "${file}",
-          python = function()
-            local root = vim.fs.root(0, ".venv")
-            return root and (root .. "/.venv/bin/python") or "python3"
-          end,
-          cwd = function()
-            return vim.fs.root(0, ".venv") or vim.fn.getcwd()
-          end,
-        },
-      }
-
-      vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint)
-      vim.keymap.set("n", "<leader>dc", dap.continue)
-      vim.keymap.set("n", "<leader>dq", dap.terminate)
-      vim.keymap.set("n", "<leader>dr", dap.repl.open)
-      vim.keymap.set("n", "<leader>dl", dap.run_last)
-      vim.keymap.set({ "n", "v" }, "<leader>dh", function()
-        require("dap.ui.widgets").hover()
-      end)
-      vim.keymap.set("n", "<Down>", dap.step_over)
-      vim.keymap.set("n", "<Right>", dap.step_into)
-      vim.keymap.set("n", "<Left>", dap.step_out)
-      vim.keymap.set("n", "<Up>", dap.restart_frame)
-    end,
-  },
-  "stevearc/oil.nvim",
-  "kdheepak/lazygit.nvim",
-  "esmuellert/codediff.nvim",
-  "MeanderingProgrammer/render-markdown.nvim",
-  "goolord/alpha-nvim",
-  "nvim-tree/nvim-web-devicons",
-  {
-    "rebelot/kanagawa.nvim",
-    lazy = false,
-    -- priority = 1000, -- Ensure it loads first
-    config = function()
-      require("kanagawa").setup({
-        colors = {
-          theme = {
-            all = {
-              ui = {
-                bg_gutter = "none",
-              },
-            },
-          },
-        },
-      })
-      vim.cmd.colorscheme("kanagawa-wave")
-    end,
-  },
-  { "saghen/blink.cmp",                version = "*" },
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    opts = {
-      options = {
-        theme = "kanagawa",
-        component_separators = "|",
-        section_separators = { left = "", right = "" },
-      },
-    },
-  },
-  -- Mini plugins
-  { "echasnovski/mini.ai",                           version = "*", opts = {} },
-  { "echasnovski/mini.comment",                      version = "*", opts = {} },
-  { "echasnovski/mini.move",                         version = "*", opts = {} },
-  { "echasnovski/mini.surround",                     version = "*", opts = {} },
-  -- { "echasnovski/mini.cursorword",                   version = "*", opts = {} },
-  { "echasnovski/mini.indentscope",                  version = "*", opts = {} },
-  { "echasnovski/mini.pairs",                        version = "*", opts = {} },
-  -- { "echasnovski/mini.trailspace",                   version = "*", opts = {} },
-  { "echasnovski/mini.bufremove",                    version = "*", opts = {} },
-  { "echasnovski/mini.notify",                       version = "*", opts = {} },
-  { url = "https://codeberg.org/andyg/leap.nvim.git" },
+--https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack#update
+vim.pack.add({
+  'https://github.com/ibhagwan/fzf-lua',
+  'https://github.com/nvim-treesitter/nvim-treesitter',
+  -- Dependencies are flatly listed in their required loading order
+  'https://github.com/mason-org/mason.nvim',
+  'https://github.com/mason-org/mason-lspconfig.nvim',
+  'https://github.com/neovim/nvim-lspconfig',
+  'https://github.com/mfussenegger/nvim-dap',
+  'https://github.com/stevearc/oil.nvim',
+  'https://github.com/kdheepak/lazygit.nvim',
+  'https://github.com/esmuellert/codediff.nvim',
+  'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/goolord/alpha-nvim',
+  'https://github.com/nvim-tree/nvim-web-devicons',
+  'https://github.com/rebelot/kanagawa.nvim',
+  { src = 'https://github.com/saghen/blink.cmp',             version = vim.version.range('1.x') },
+  'https://github.com/nvim-lualine/lualine.nvim',
+  -- Mini plugins with version pinning
+  -- { src = 'https://github.com/echasnovski/mini.ai', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.comment', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.move', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.surround', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.indentscope', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.pairs', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.bufremove', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.notify', version = '*' },
+  -- Mini plugins (Tracking the stable release branch)
+  { src = 'https://github.com/echasnovski/mini.ai',          version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.comment',     version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.move',        version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.surround',    version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.indentscope', version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.pairs',       version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.bufremove',   version = 'stable' },
+  { src = 'https://github.com/echasnovski/mini.notify',      version = 'stable' },
+  -- Non-GitHub URLs
+  'https://codeberg.org/andyg/leap.nvim.git',
 })
+require("mason").setup()
 
 --Kanagawa apply after 0.12
--- require('kanagawa').setup({
---   colors = {
---     theme = {
---       all = {
---         ui = {
---           bg_gutter = "none"
---         }
---       }
---     }
---   }
--- })
--- vim.cmd('colorscheme kanagawa-wave')
+require('kanagawa').setup({
+  colors = {
+    theme = {
+      all = {
+        ui = {
+          bg_gutter = "none"
+        }
+      }
+    }
+  }
+})
+vim.cmd('colorscheme kanagawa-wave')
 
 -- Treesitter
 -- require("nvim-treesitter.configs").setup({
@@ -307,11 +207,31 @@ require("lazy").setup({
 --   },
 -- })
 
+--- Statusline (Lualine)
+require("lualine").setup({
+  options = {
+    theme = "kanagawa",
+    component_separators = "|",
+    section_separators = { left = "", right = "" },
+  },
+})
+
 --Markdown
 require("render-markdown").setup({})
 
+--- Mini Plugins
+require("mini.ai").setup({})
+require("mini.comment").setup({})
+require("mini.move").setup({})
+require("mini.surround").setup({})
+require("mini.indentscope").setup({})
+require("mini.pairs").setup({})
+require("mini.bufremove").setup({})
+require("mini.notify").setup({})
+
 --Fzf-lua
 require("fzf-lua").setup({
+  ui_select = true,
   keymap = {
     builtin = {
       ["<C-d>"] = "preview-page-down",
@@ -342,6 +262,42 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 vim.cmd("syntax off")
 
+-- LSP
+vim.lsp.enable({
+  'ty',     -- also $ uv tool install ty@latest
+  'ruff',   -- also $ uv tool install ruff@latest
+  'lua_ls', -- also $ brew install lua-language-server
+  'ts_ls'
+})
+vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
+vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
+vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
+
+vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_finder<cr>", { desc = "Definition + References" })
+vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "References" })
+vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
+vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
+
+vim.o.signcolumn = 'yes' -- make lsp warnings not widen the gutter
+-- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('my.lsp', { clear = true }),
+  callback = function(ev)
+    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+    if not client:supports_method('textDocument/willSaveWaitUntil')
+        and client:supports_method('textDocument/formatting') then
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = vim.api.nvim_create_augroup('my.lsp.fmt', { clear = false }),
+        buffer = ev.buf,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
+        end,
+      })
+    end
+  end,
+})
+
 --Blink
 require('blink.cmp').setup({
   signature = {
@@ -349,6 +305,48 @@ require('blink.cmp').setup({
     window = { show_documentation = false },
   },
 })
+
+-- Dap (debugging)
+local dap = require('dap')
+dap.adapters.debugpy = function(cb, config) -- also $ uv tool install debugpy@latest
+  if config.request == 'attach' then
+    cb({
+      type = 'server',
+      port = config.connect.port,
+      host = config.connect.host or '127.0.0.1',
+    })
+  else
+    cb({
+      type = 'executable',
+      command = 'debugpy-adapter',
+    })
+  end
+end
+dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+  {
+    type = 'debugpy',
+    request = 'launch',
+    name = 'Launch file',
+    program = '${file}',
+    python = function()
+      local root = vim.fs.root(0, '.venv')
+      return { root and root .. '/.venv/bin/python' or 'python3' }
+    end,
+    cwd = function()
+      return vim.fs.root(0, '.venv') or vim.fn.getcwd()
+    end,
+  },
+}
+vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug toggle breakpoint' })
+vim.keymap.set('n', '<leader>dc', dap.continue, { desc = 'Debug continue' })
+vim.keymap.set('n', '<leader>dq', dap.terminate, { desc = 'Debug terminate' })
+vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = 'Debug open REPL' })
+vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = 'Debug run last' })
+vim.keymap.set({ 'n', 'v' }, '<leader>dh', require('dap.ui.widgets').hover, { desc = 'Debug hover' })
+vim.keymap.set('n', '<Down>', dap.step_over, { desc = 'Debug step over' })
+vim.keymap.set('n', '<Right>', dap.step_into, { desc = 'Debug step into' })
+vim.keymap.set('n', '<Left>', dap.step_out, { desc = 'Debug step out' })
+vim.keymap.set('n', '<Up>', dap.restart_frame, { desc = 'Debug restart frame' })
 
 --Oil
 require("oil").setup({
@@ -373,74 +371,20 @@ vim.keymap.set("n", "<leader>gb", function()
   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
 end, { desc = "Open git remote" })
 
--- LSP Configuration
-vim.lsp.config("lua_ls", {
-  settings = {
-    Lua = {
-      runtime = { version = "LuaJIT" },
-      workspace = {
-        checkThirdParty = false,
-        library = { vim.env.VIMRUNTIME },
-      },
-      diagnostic = { globals = { "vim" } },
-      codeLens = { enable = true },
-      hint = { enable = true, semicolon = "Disable" },
-    },
-  },
-})
-
--- LSP
-vim.lsp.enable({
-  "ty", --uv
-  "ruff",
-  "lua_ls",
-  "ts_ls",
-})
-
-vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
-vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
-vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
-
-vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_finder<cr>", { desc = "Definition + References" })
-vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "References" })
-vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
-vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
-
--- -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
-vim.api.nvim_create_autocmd("LspAttach", {
-  group = vim.api.nvim_create_augroup("my.lsp", { clear = true }),
-  callback = function(ev)
-    local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
-    if
-        not client:supports_method("textDocument/willSaveWaitUntil")
-        and client:supports_method("textDocument/formatting")
-    then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = vim.api.nvim_create_augroup("my.lsp.fmt", { clear = false }),
-        buffer = ev.buf,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = ev.buf, id = client.id, timeout_ms = 1000 })
-        end,
-      })
-    end
-  end,
-})
-
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
 vim.keymap.set('n', '<leader>ru', '<cmd>CodeDiff<cr>', { desc = 'Code diff not staged' })
 vim.keymap.set('n', '<leader>rm', '<cmd>CodeDiff main<cr>', { desc = 'Code diff main' })
 vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code diff previous commit' })
 
---Nevim home screen
+-- Neovim home screen
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
 -- 1. Header (ASCII Art)
 dashboard.section.header.val = {
-  [[                               __                ]],
-  [[  ___     ___    ___   __  __ /\_\    ___ ___    ]],
+  [[                                __                ]],
+  [[ ___     ___    ___    __  __ /\_\    ___ ___    ]],
   [[ / _ `\  / __`\ / __`\/\ \/\ \\/\ \  / __` __`\  ]],
   [[/\ \/\ \/\  __//\ \_\ \ \ \_/ |\ \ \/\ \/\ \/\ \ ]],
   [[\ \_\ \_\ \____\ \____/\ \___/  \ \_\ \_\ \_\ \_\]],
@@ -457,10 +401,11 @@ dashboard.section.buttons.val = {
   dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
 }
 
--- 3. Footer
-local stats = require("lazy").stats()
-local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-dashboard.section.footer.val = "⚡ Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
+-- 3. Footer (Fixed for Neovim 0.12 native package manager)
+local count = #vim.pack.get()
+-- Native calculation of total elapsed milliseconds since binary startup
+local ms = math.floor(vim.fn.reltimefloat(vim.fn.reltime()) * 1000)
+dashboard.section.footer.val = "⚡ Neovim loaded " .. count .. " packages in " .. ms .. "ms"
 
 -- 4. Highlights (Kanagawa compatible)
 dashboard.section.header.opts.hl = "AlphaHeader"
@@ -472,7 +417,8 @@ alpha.setup(dashboard.opts)
 --Leap.nvim configuration
 require("leap").opts.safe_labels = {} -- Jump immediately to single matches
 require("leap").opts.labels =
-{ "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
+-- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
+{ "a", "s", "d", "f", "g", "h", "j", "k", "l", ";" }
 
 -- Basic bidirectional leap motions
 vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")

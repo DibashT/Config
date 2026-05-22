@@ -57,7 +57,7 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       1100x;
+    width:                       1100px;
     x-offset:                    0px;
     y-offset:                    0px;
 
