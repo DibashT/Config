@@ -1,4 +1,3 @@
-
 /**
  *
  * Author : Aditya Shakya (adi1090x)
@@ -10,12 +9,12 @@
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,run,window"; //removed filebrowser
+	modi:                       "drun,run,filebrowser,window";
     show-icons:                 true;
     display-drun:               "APPS";
     display-run:                "RUN";
-    // display-filebrowser:        "FILES";
-    // display-window:             "WINDOW";
+    display-filebrowser:        "FILES";
+    display-window:             "WINDOW";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
 }
@@ -23,19 +22,12 @@ configuration {
 /*****----- Global Properties -----*****/
 * {
     font:                        "JetBrains Mono Nerd Font 10";
-    // background:                  #231419;
-    // background-alt:              #2D1E23;
-    // foreground:                  #FFFFFF;
-    // selected:                    #426647;
-    // active:                      #2E3F34;
-    // urgent:                      #D08261;
-/* Kanagawa Color Palette */
-    background:                  #1F1F28; /* sumiInk1 (Main Background) */
-    background-alt:              #2A2A37; /* sumiInk3 (Search bar & buttons) */
-    foreground:                  #DCD7BA; /* fujiWhite (Text) */
-    selected:                    #2D4F67; /* waveBlue2 (Selected items) */
-    active:                      #7E9CD8; /* crystalBlue (Active states) */
-    urgent:                      #E82424; /* samuraiRed (Urgent states) */
+    background:                  #101010;
+    background-alt:              #252525;
+    foreground:                  #FFFFFF;
+    selected:                    #505050;
+    active:                      #909090;
+    urgent:                      #707070;
 }
 
 /*****----- Main Window -----*****/
@@ -45,14 +37,13 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       650px;
-    // height:                      420px;
+    width:                       1000px;
     x-offset:                    0px;
     y-offset:                    0px;
 
     /* properties for all widgets */
     enabled:                     true;
-    border-radius:               12px;
+    border-radius:               15px;
     cursor:                      "default";
     background-color:            @background;
 }
@@ -69,8 +60,7 @@ mainbox {
 imagebox {
     padding:                     20px;
     background-color:            transparent;
-    background-image:            url("~/.config/rofi/images/ign-waifu.png", height);
-    // background-image:            url("~/.config/rofi/images/dragon.jpg", height);
+    background-image:            url("~/.config/rofi/images/g.png", height);
     orientation:                 vertical;
     children:                    [ "inputbar", "dummy", "mode-switcher" ];
 }
@@ -85,14 +75,13 @@ listbox {
 
 dummy {
     background-color:            transparent;
-    expand: true;
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
     spacing:                     10px;
-    padding:                     12px;
+    padding:                     15px;
     border-radius:               10px;
     background-color:            @background-alt;
     text-color:                  @foreground;
@@ -117,12 +106,12 @@ entry {
 /*****----- Mode Switcher -----*****/
 mode-switcher{
     enabled:                     true;
-    spacing:                     15px;
+    spacing:                     20px;
     background-color:            transparent;
     text-color:                  @foreground;
 }
 button {
-    padding:                     12px;
+    padding:                     15px;
     border-radius:               10px;
     background-color:            @background-alt;
     text-color:                  inherit;
@@ -137,7 +126,7 @@ button selected {
 listview {
     enabled:                     true;
     columns:                     1;
-    lines:                       6;
+    lines:                       8;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
@@ -146,7 +135,7 @@ listview {
     fixed-height:                true;
     fixed-columns:               true;
     
-    spacing:                     8px;
+    spacing:                     10px;
     background-color:            transparent;
     text-color:                  @foreground;
     cursor:                      "default";
@@ -155,7 +144,7 @@ listview {
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     12px;
+    spacing:                     15px;
     padding:                     8px;
     border-radius:               10px;
     background-color:            transparent;
@@ -205,7 +194,7 @@ message {
     background-color:            transparent;
 }
 textbox {
-    padding:                     12px;
+    padding:                     15px;
     border-radius:               10px;
     background-color:            @background-alt;
     text-color:                  @foreground;
@@ -213,7 +202,7 @@ textbox {
     horizontal-align:            0.0;
 }
 error-message {
-    padding:                     12px;
+    padding:                     15px;
     border-radius:               20px;
     background-color:            @background;
     text-color:                  @foreground;

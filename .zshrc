@@ -19,7 +19,7 @@ export PATH
 # ---  OH MY ZSH SETUP ---
 ZSH_THEME="robbyrussell"
 
-# Note: Ensure autosuggestions & syntax-highlighting are cloned to $ZSH_CUSTOM/plugins
+# Ensure autosuggestions & syntax-highlighting are cloned to $ZSH_CUSTOM/plugins
 plugins=(
   git
   zsh-autosuggestions
@@ -71,3 +71,4 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
 eval "$(pyenv init -)"
+export PATH="$HOME/.npm-global/bin:$PATH"
