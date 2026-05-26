@@ -155,12 +155,33 @@
     "format": "{temperatureC}°C "
   },
   // Harddisc space used
+  // "disk": {
+  //   "interval": 30,
+  //   "format": "{percentage_used}% ",
+  //   "path": "/",
+  //   //"on-click": "ghostty -e htop"
+  // }, 
+  // // Add this new module for HDD
+  // "disk#hdd": {
+  //   "interval": 30,
+  //   "format": "{percentage_used}% ",
+  //   "path": "/mnt/storage"
+  // },
+// SSD (Root partition)
   "disk": {
     "interval": 30,
-    "format": "{percentage_used}% ",
+    "format": " {percentage_used}% ",
     "path": "/",
-    //"on-click": "ghostty -e htop"
-  }, 
+    "tooltip-format": "SSD: {used} / {total} used"
+  },
+
+  // HDD (Storage drive)  
+  "disk#hdd": {
+    "interval": 30,
+    "format": "󰋊 {percentage_used}% ",
+    "path": "/mnt/storage",
+    "tooltip-format": "HDD: {used} / {total} used"
+  },
     // Group Hardware
     "group/hardware": {
         "orientation": "inherit",
@@ -171,6 +192,7 @@
         },        
         "modules": [
             "custom/system",
+            "disk#hdd",
             "disk",
             "cpu",
             "memory"
