@@ -14,7 +14,7 @@
 #################################################
 
 dir="$HOME/.config/rofi/launchers"
-theme='launcher4'
+theme='launcher-1'
 
 ## Run
 rofi \
