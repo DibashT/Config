@@ -69,7 +69,10 @@ vim.diagnostic.config({
   virtual_text = false,
   severity_sort = true,
   update_in_insert = false,
-  float = { source = "if_many" },
+  float = {
+    source = "if_many",
+    -- border = "rounded",
+  },
   jump = { float = true },
 })
 
@@ -142,15 +145,15 @@ vim.pack.add({
   { src = 'https://github.com/saghen/blink.cmp',             version = vim.version.range('1.x') },
   'https://github.com/nvim-lualine/lualine.nvim',
   -- Mini plugins with version pinning
-  -- { src = 'https://github.com/echasnovski/mini.ai', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.comment', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.move', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.surround', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.ai',          version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.comment',     version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.move',        version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.surround',    version = '*' },
   -- { src = 'https://github.com/echasnovski/mini.indentscope', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.pairs', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.bufremove', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.notify', version = '*' },
-  -- Mini plugins (Tracking the stable release branch)
+  -- { src = 'https://github.com/echasnovski/mini.pairs',       version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.bufremove',   version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.notify',      version = '*' },
+  --Mini stable --
   { src = 'https://github.com/echasnovski/mini.ai',          version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.comment',     version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.move',        version = 'stable' },
@@ -203,7 +206,6 @@ vim.cmd('colorscheme kanagawa-wave')
 -- end
 
 -- Treesitter (Neovim 0.12 Native Way)
--- Automatically start highlighting for all supported files
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     pcall(vim.treesitter.start)
@@ -317,7 +319,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
 require('blink.cmp').setup({
   signature = {
     enabled = true,
-    window = { show_documentation = false },
+    window = {
+      show_documentation = false,
+      border = "rounded"
+    },
   },
 })
 

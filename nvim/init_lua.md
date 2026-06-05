@@ -37,12 +37,12 @@ vim.o.wildmode = "longest:full,full"            --Completion mode for command-li
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
 
 -- Set undo directory and ensure it exists
-local undodir = "~/.local/share/nvim/undodir"
-local undodir_path = vim.fn.expand(undodir)
-vim.o.undodir = undodir_path
-if vim.fn.isdirectory(undodir_path) == 0 then
-  vim.fn.mkdir(undodir_path, "p")
-end
+-- local undodir = "~/.local/share/nvim/undodir"
+-- local undodir_path = vim.fn.expand(undodir)
+-- vim.o.undodir = undodir_path
+-- if vim.fn.isdirectory(undodir_path) == 0 then
+--   vim.fn.mkdir(undodir_path, "p")
+-- end
 
 --Behavious setting--Sync clipboards
 vim.schedule(function()
@@ -79,6 +79,14 @@ vim.keymap.set("n", "<leader>bp", "<Cmd>bprevious<CR>", { desc = "Previous buffe
 
 --Show diagnostics
 vim.keymap.set("n", "<leader>q", vim.diagnostic.open_float, { desc = "Show diagnostic" })
+-- Navigate diagnostics
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
+  { desc = "Go to previous error" })
+vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
+  { desc = "Go to next error" })
+
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
 
 --Better indenting in Visual mode
@@ -171,41 +179,48 @@ require('kanagawa').setup({
 vim.cmd('colorscheme kanagawa-wave')
 
 -- Treesitter
--- require("nvim-treesitter.configs").setup({
---   ensure_installed = {
---     "lua",
---     "vim",
---     "vimdoc",
---     "query",
+-- local status_ok, treesitter = pcall(require, "nvim-treesitter.configs")
 --
---     "python",
---     "javascript",
---     "typescript",
---     "tsx",
---
---     "html",
---     "css",
---     "json",
---     "yaml",
---
---     "bash",
---     "markdown",
---     "markdown_inline",
---
---     "c",
---     "cpp",
---   },
---
---   auto_install = true,
---
---   highlight = {
---     enable = true,
---   },
---
---   indent = {
---     enable = true,
---   },
--- })
+-- if status_ok then
+--   treesitter.setup({
+--     ensure_installed = {
+--       "c", "lua", "vim", "vimdoc", "query", "python", "markdown", "markdown_inline",
+--       "html", "css", "javascript", "typescript", "tsx",
+--       "json", "jsonc", "yaml", "toml", "xml",
+--       "bash", "dockerfile", "make", "regex",
+--       "git_config", "gitcommit", "gitignore", "git_rebase",
+--     },
+--     auto_install = true,
+--     highlight = {
+--       enable = true,
+--     },
+--     indent = {
+--       enable = true,
+--     },
+--   })
+-- else
+--   vim.notify("Treesitter is still downloading... please restart Neovim in a few seconds.", vim.log.levels.WARN)
+-- end
+
+-- Treesitter (Neovim 0.12 Native Way)
+-- Automatically start highlighting for all supported files
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
+})
+
+-- Install the parsers you need
+local parsers = {
+  "c", "lua", "vim", "vimdoc", "query", "python", "markdown", "markdown_inline",
+  "html", "css", "javascript", "typescript", "tsx",
+  "json", "yaml", "toml", "xml",
+  "bash", "dockerfile", "make", "regex",
+  "git_config", "gitcommit", "gitignore", "git_rebase"
+}
+pcall(function()
+  require("nvim-treesitter").install(parsers)
+end)
 
 --- Statusline (Lualine)
 require("lualine").setup({
@@ -260,7 +275,7 @@ vim.api.nvim_create_autocmd("FileType", {
     pcall(vim.treesitter.start)
   end,
 })
-vim.cmd("syntax off")
+-- vim.cmd("syntax off")
 
 -- LSP
 vim.lsp.enable({
