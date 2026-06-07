@@ -10,7 +10,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "codediff.nvim": {
-      "rev": "29b06f37251f2e010f53a0892573b2ec03d165e2",
+      "rev": "5d6aa753797a0ebda14dd769ed03d12a320d689b",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "fzf-lua": {
