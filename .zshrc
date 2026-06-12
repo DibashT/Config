@@ -49,9 +49,9 @@ setopt HIST_VERIFY                # Show command with history expansion before r
 # --- FZF & FD INTEGRATION ---
 if command -v fzf >/dev/null; then
   source <(fzf --zsh)
-  
+
   _fd_flags="--hidden --follow --strip-cwd-prefix --exclude .git --exclude node_modules --exclude .cache --exclude Library"
-  
+
   export FZF_DEFAULT_COMMAND="fd $_fd_flags"
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="fd --type d $_fd_flags"
