@@ -46,7 +46,8 @@ vim.o.wildignorecase = true                     --Case-sensitive tab completion 
 
 --Behavious setting--Sync clipboards
 vim.schedule(function()
-  vim.o.clipboard = "unnamedplus"
+  vim.o.clipboard:append("unnamedplus")
+  vim.g.clipboard = 'osc52' --For copies over to ssh
 end)
 
 vim.o.swapfile = false --Disable swap file to prevent annoying errors
@@ -66,10 +67,14 @@ end, { desc = "Copy relative path" })
 
 --Vim diagnostic
 vim.diagnostic.config({
-  virtual_text = false,
-  severity_sort = true,
-  update_in_insert = false,
-  float = { source = "if_many" },
+  underline = false,        --dont underline error
+  virtual_text = false,     --show most severe error first
+  severity_sort = true,     --dont show while typing
+  update_in_insert = false, --nice look for floats (using ty and ruff)
+  float = {
+    source = "if_many",
+    -- border = "rounded",
+  },
   jump = { float = true },
 })
 
@@ -87,6 +92,7 @@ vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.d
 vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
   { desc = "Go to next error" })
 
+-- Clear seacrh highlight
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
 
 --Better indenting in Visual mode
@@ -119,7 +125,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
 vim.api.nvim_create_autocmd("TextYankPost", {
   group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
   callback = function()
-    vim.hl.on_yank()
+    vim.hl.on_yank({ timeout = 300 })
   end,
 })
 
@@ -138,19 +144,18 @@ vim.pack.add({
   'https://github.com/MeanderingProgrammer/render-markdown.nvim',
   'https://github.com/goolord/alpha-nvim',
   'https://github.com/nvim-tree/nvim-web-devicons',
-  'https://github.com/rebelot/kanagawa.nvim',
   { src = 'https://github.com/saghen/blink.cmp',             version = vim.version.range('1.x') },
   'https://github.com/nvim-lualine/lualine.nvim',
   -- Mini plugins with version pinning
-  -- { src = 'https://github.com/echasnovski/mini.ai', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.comment', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.move', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.surround', version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.ai',          version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.comment',     version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.move',        version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.surround',    version = '*' },
   -- { src = 'https://github.com/echasnovski/mini.indentscope', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.pairs', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.bufremove', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.notify', version = '*' },
-  -- Mini plugins (Tracking the stable release branch)
+  -- { src = 'https://github.com/echasnovski/mini.pairs',       version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.bufremove',   version = '*' },
+  -- { src = 'https://github.com/echasnovski/mini.notify',      version = '*' },
+  --Mini stable --
   { src = 'https://github.com/echasnovski/mini.ai',          version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.comment',     version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.move',        version = 'stable' },
@@ -161,7 +166,12 @@ vim.pack.add({
   { src = 'https://github.com/echasnovski/mini.notify',      version = 'stable' },
   -- Non-GitHub URLs
   'https://codeberg.org/andyg/leap.nvim.git',
+  -- color scheme
+  'https://github.com/rebelot/kanagawa.nvim',
+  { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
+  -- 'https://github.com/vague-theme/vague.nvim',
 })
+
 require("mason").setup()
 
 --Kanagawa apply after 0.12
@@ -178,32 +188,10 @@ require('kanagawa').setup({
 })
 vim.cmd('colorscheme kanagawa-wave')
 
--- Treesitter
--- local status_ok, treesitter = pcall(require, "nvim-treesitter.configs")
---
--- if status_ok then
---   treesitter.setup({
---     ensure_installed = {
---       "c", "lua", "vim", "vimdoc", "query", "python", "markdown", "markdown_inline",
---       "html", "css", "javascript", "typescript", "tsx",
---       "json", "jsonc", "yaml", "toml", "xml",
---       "bash", "dockerfile", "make", "regex",
---       "git_config", "gitcommit", "gitignore", "git_rebase",
---     },
---     auto_install = true,
---     highlight = {
---       enable = true,
---     },
---     indent = {
---       enable = true,
---     },
---   })
--- else
---   vim.notify("Treesitter is still downloading... please restart Neovim in a few seconds.", vim.log.levels.WARN)
--- end
+--Rose pine colorscheme
+require("rose-pine").setup()
 
 -- Treesitter (Neovim 0.12 Native Way)
--- Automatically start highlighting for all supported files
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     pcall(vim.treesitter.start)
@@ -222,7 +210,7 @@ pcall(function()
   require("nvim-treesitter").install(parsers)
 end)
 
---- Statusline (Lualine)
+-- Statusline (Lualine)
 require("lualine").setup({
   options = {
     theme = "kanagawa",
@@ -231,10 +219,10 @@ require("lualine").setup({
   },
 })
 
---Markdown
+-- Markdown
 require("render-markdown").setup({})
 
---- Mini Plugins
+-- Mini Plugins
 require("mini.ai").setup({})
 require("mini.comment").setup({})
 require("mini.move").setup({})
@@ -246,6 +234,19 @@ require("mini.notify").setup({})
 
 --Fzf-lua
 require("fzf-lua").setup({
+  -- Disabled default fzf colors as per your reference snippet
+  fzf_colors = true,
+  -- Imported the custom ripgrep options for better search match highlighting
+  grep = {
+    rg_opts = table.concat({
+      "--column --line-number --no-heading --color=always --smart-case --max-columns=4096",
+      -- "--colors 'path:none'",
+      -- "--colors 'line:none'",
+      -- "--colors 'column:none'",
+      -- "--colors 'match:fg:225,255,229'",
+      "-e",
+    }, " "),
+  },
   ui_select = true,
   keymap = {
     builtin = {
@@ -265,6 +266,13 @@ vim.keymap.set("n", "<leader><leader>", "<cmd>FzfLua files<cr>", { desc = "Find 
 vim.keymap.set("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Find live grep" })
 vim.keymap.set("n", "<leader>fr", "<cmd>FzfLua resume<cr>", { desc = "Resume last picker" })
 vim.keymap.set("n", "<leader>,", "<cmd>FzfLua buffers<cr>", { desc = "Buffers" })
+
+vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_finder<cr>", { desc = "Definition + References" })
+vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "References" })
+vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
+vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
+
+vim.keymap.set('n', '<leader>fc', '<cmd>FzfLua colorschemes<cr>', { desc = 'Pick colorscheme' })
 
 --Web-devicons
 require("nvim-web-devicons").setup({})
@@ -289,10 +297,6 @@ vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
 vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
 
-vim.keymap.set("n", "gd", "<cmd>FzfLua lsp_finder<cr>", { desc = "Definition + References" })
-vim.keymap.set("n", "grr", "<cmd>FzfLua lsp_references<cr>", { desc = "References" })
-vim.keymap.set("n", "gri", "<cmd>FzfLua lsp_implementations<cr>", { desc = "Implementations" })
-vim.keymap.set("n", "gra", "<cmd>FzfLua lsp_code_actions<cr>", { desc = "Code actions" })
 
 vim.o.signcolumn = 'yes' -- make lsp warnings not widen the gutter
 -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
@@ -317,9 +321,44 @@ vim.api.nvim_create_autocmd('LspAttach', {
 require('blink.cmp').setup({
   signature = {
     enabled = true,
-    window = { show_documentation = false },
+    window = {
+      show_documentation = false,
+      border = "rounded"
+    },
   },
 })
+
+-- Dap (debugging)
+-- local dap = require('dap')
+-- dap.adapters.debugpy = function(cb, config) -- also $ uv tool install debugpy@latest
+--   if config.request == 'attach' then
+--     cb({
+--       type = 'server',
+--       port = config.connect.port,
+--       host = config.connect.host or '127.0.0.1',
+--     })
+--   else
+--     cb({
+--       type = 'executable',
+--       command = 'debugpy-adapter',
+--     })
+--   end
+-- end
+-- dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
+--   {
+--     type = 'debugpy',
+--     request = 'launch',
+--     name = 'Launch file',
+--     program = '${file}',
+--     python = function()
+--       local root = vim.fs.root(0, '.venv')
+--       return { root and root .. '/.venv/bin/python' or 'python3' }
+--     end,
+--     cwd = function()
+--       return vim.fs.root(0, '.venv') or vim.fn.getcwd()
+--     end,
+--   },
+-- }
 
 -- Dap (debugging)
 local dap = require('dap')
@@ -343,6 +382,40 @@ dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug
     request = 'launch',
     name = 'Launch file',
     program = '${file}',
+    justMyCode = false,
+    python = function()
+      local root = vim.fs.root(0, '.venv')
+      return { root and root .. '/.venv/bin/python' or 'python3' }
+    end,
+    cwd = function()
+      return vim.fs.root(0, '.venv') or vim.fn.getcwd()
+    end,
+  },
+  {
+    type = 'debugpy',
+    request = 'launch',
+    name = 'Pytest current file',
+    module = 'pytest',
+    args = { '${file}', '-s' },
+    justMyCode = false,
+    python = function()
+      local root = vim.fs.root(0, '.venv')
+      return { root and root .. '/.venv/bin/python' or 'python3' }
+    end,
+    cwd = function()
+      return vim.fs.root(0, '.venv') or vim.fn.getcwd()
+    end,
+  },
+  {
+    type = 'debugpy',
+    request = 'launch',
+    name = 'Pytest current file -k',
+    module = 'pytest',
+    args = function()
+      local test_name = vim.fn.input('pytest -k: ')
+      return { '${file}', '-s', '-k', test_name }
+    end,
+    justMyCode = false,
     python = function()
       local root = vim.fs.root(0, '.venv')
       return { root and root .. '/.venv/bin/python' or 'python3' }
@@ -380,11 +453,36 @@ require("oil").setup({
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
---Lazygit
-vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
-vim.keymap.set("n", "<leader>gb", function()
-  vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
-end, { desc = "Open git remote" })
+-- Lazygit.nvim
+local function git_line_history(start_line, end_line)
+  start_line, end_line = math.min(start_line, end_line), math.max(start_line, end_line)
+  local range = start_line .. ',' .. end_line .. ':' .. vim.fn.expand('%:t')
+  local command = { 'git', '-C', vim.fn.expand('%:p:h'), '--no-pager', 'log', '-L', range }
+  local output = vim.fn.systemlist(command)
+  local command_text = vim.fn.join(vim.tbl_map(vim.fn.shellescape, command), ' ')
+
+  vim.cmd('vnew')
+  vim.bo.buftype = 'nofile'
+  vim.bo.filetype = 'diff'
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, vim.list_extend({ command_text, '' }, output))
+  vim.bo.modified = false
+end
+
+vim.keymap.set('n', '<leader>g', '<cmd>LazyGit<cr>', { desc = 'Lazygit' })
+vim.keymap.set('n', '<leader>gb', function() vim.ui.open(vim.fn.systemlist('git remote get-url origin')[1]) end,
+  { desc = 'Open git remote' })
+vim.keymap.set('n', '<leader>gl', function()
+  git_line_history(vim.fn.line('.'), vim.fn.line('.'))
+end, { desc = 'Git line history' })
+vim.keymap.set('v', '<leader>gl', function()
+  git_line_history(vim.fn.line('v'), vim.fn.line('.'))
+end, { desc = 'Git line history' })
+
+-- --Lazygit
+-- vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
+-- vim.keymap.set("n", "<leader>gb", function()
+--   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
+-- end, { desc = "Open git remote" })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})

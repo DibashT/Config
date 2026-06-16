@@ -64,6 +64,10 @@ alias zshconfig="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
 alias ls='ls --color=auto'
 alias ..='cd ..'
+# alias lvim="NVIM_APPNAME=lazyvim nvim"
+lvim() {
+    NVIM_APPNAME=lazyvim nvim "$@"
+}
 
 # --- PYENV ---
 export PYENV_ROOT="$HOME/.pyenv"

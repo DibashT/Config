@@ -10,7 +10,7 @@ vim.o.ignorecase = true                         -- Ignore case in search
 vim.o.smartcase = true                          -- ...unless search has capital letters
 vim.o.shiftwidth = 2                            -- Size of an indent
 vim.o.tabstop = 2                               --Tab width
-vim.opt.smartindent = true                      --smart indentation
+vim.o.smartindent = true                        --smart indentation
 vim.o.expandtab = true                          -- Use spaces instead of tabs
 vim.o.termguicolors = true                      -- Better colors
 vim.o.scrolloff = 10                            -- Keep 10 line below/above cursor line
@@ -20,33 +20,26 @@ vim.o.spelllang = "en"                          -- spell check
 vim.o.cmdheight = 1                             --command line height
 vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = "yes"                        --Alwasy show sign column
-vim.o.hlsearch = true                           --highlight serach result
-vim.o.incsearch = true                          --Show matches as you type
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
 vim.o.updatetime = 250                          -- Snapy key
-vim.o.timeoutlen = 300
+vim.o.timeoutlen = 300                          --balance speed
+vim.o.ttimeoutlen = 50                          --fast timesout sequence (ESC)
 vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
 vim.o.undofile = true                           --Persistent undo
-vim.o.autoread = true                           --Auto reload file if changed outside
+vim.o.undolevels = 10000                        --allows to safely travesre  much further
 vim.o.selection = "inclusive"                   --Use inclusive selection
 vim.o.modifiable = true                         --Allow editing buffers
-vim.o.encoding = "UTF-8"                        --Ut8 encoding
-vim.o.wildmenu = true                           --Enable command line completion menu
 vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
-
--- Set undo directory and ensure it exists
--- local undodir = "~/.local/share/nvim/undodir"
--- local undodir_path = vim.fn.expand(undodir)
--- vim.o.undodir = undodir_path
--- if vim.fn.isdirectory(undodir_path) == 0 then
---   vim.fn.mkdir(undodir_path, "p")
--- end
+-- vim.o.cursorline = true                         --highlight the current cursor line
+vim.o.splitkeep =
+'screen' --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 
 --Behavious setting--Sync clipboards
 vim.schedule(function()
-  vim.o.clipboard = "unnamedplus"
+  vim.opt.clipboard:append("unnamedplus")
+  vim.g.clipboard = 'osc52' --For copies over to ssh
 end)
 
 vim.o.swapfile = false --Disable swap file to prevent annoying errors
@@ -72,7 +65,7 @@ vim.diagnostic.config({
   update_in_insert = false, --nice look for floats (using ty and ruff)
   float = {
     source = "if_many",
-    -- border = "rounded",
+    border = "none",
   },
   jump = { float = true },
 })
@@ -145,15 +138,6 @@ vim.pack.add({
   'https://github.com/nvim-tree/nvim-web-devicons',
   { src = 'https://github.com/saghen/blink.cmp',             version = vim.version.range('1.x') },
   'https://github.com/nvim-lualine/lualine.nvim',
-  -- Mini plugins with version pinning
-  -- { src = 'https://github.com/echasnovski/mini.ai',          version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.comment',     version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.move',        version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.surround',    version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.indentscope', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.pairs',       version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.bufremove',   version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.notify',      version = '*' },
   --Mini stable --
   { src = 'https://github.com/echasnovski/mini.ai',          version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.comment',     version = 'stable' },
@@ -294,10 +278,7 @@ vim.lsp.enable({
 vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
 vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
 
-
-vim.o.signcolumn = 'yes' -- make lsp warnings not widen the gutter
 -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', { clear = true }),
@@ -326,38 +307,6 @@ require('blink.cmp').setup({
     },
   },
 })
-
--- Dap (debugging)
--- local dap = require('dap')
--- dap.adapters.debugpy = function(cb, config) -- also $ uv tool install debugpy@latest
---   if config.request == 'attach' then
---     cb({
---       type = 'server',
---       port = config.connect.port,
---       host = config.connect.host or '127.0.0.1',
---     })
---   else
---     cb({
---       type = 'executable',
---       command = 'debugpy-adapter',
---     })
---   end
--- end
--- dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
---   {
---     type = 'debugpy',
---     request = 'launch',
---     name = 'Launch file',
---     program = '${file}',
---     python = function()
---       local root = vim.fs.root(0, '.venv')
---       return { root and root .. '/.venv/bin/python' or 'python3' }
---     end,
---     cwd = function()
---       return vim.fs.root(0, '.venv') or vim.fn.getcwd()
---     end,
---   },
--- }
 
 -- Dap (debugging)
 local dap = require('dap')
@@ -477,11 +426,11 @@ vim.keymap.set('v', '<leader>gl', function()
   git_line_history(vim.fn.line('v'), vim.fn.line('.'))
 end, { desc = 'Git line history' })
 
--- --Lazygit
--- vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
--- vim.keymap.set("n", "<leader>gb", function()
---   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
--- end, { desc = "Open git remote" })
+--Lazygit
+vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
+vim.keymap.set("n", "<leader>gb", function()
+  vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
+end, { desc = "Open git remote" })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
@@ -493,7 +442,7 @@ vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code dif
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
--- 1. Header (ASCII Art)
+-- Header (ASCII Art)
 dashboard.section.header.val = {
   [[                                __                ]],
   [[ ___     ___    ___    __  __ /\_\    ___ ___    ]],
@@ -503,7 +452,7 @@ dashboard.section.header.val = {
   [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
 }
 
--- 2. Buttons
+-- Buttons
 dashboard.section.buttons.val = {
   dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
   dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
@@ -513,20 +462,20 @@ dashboard.section.buttons.val = {
   dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
 }
 
--- 3. Footer (Fixed for Neovim 0.12 native package manager)
+-- Footer (Fixed for Neovim 0.12 native package manager)
 local count = #vim.pack.get()
 -- Native calculation of total elapsed milliseconds since binary startup
 local ms = math.floor(vim.fn.reltimefloat(vim.fn.reltime()) * 1000)
 dashboard.section.footer.val = "⚡ Neovim loaded " .. count .. " packages in " .. ms .. "ms"
 
--- 4. Highlights (Kanagawa compatible)
+-- Highlights (Kanagawa compatible)
 dashboard.section.header.opts.hl = "AlphaHeader"
 dashboard.section.buttons.opts.hl = "AlphaButtons"
 dashboard.section.footer.opts.hl = "AlphaFooter"
 
 alpha.setup(dashboard.opts)
 
---Leap.nvim configuration
+-- Leap.nvim configuration
 require("leap").opts.safe_labels = {} -- Jump immediately to single matches
 require("leap").opts.labels =
 -- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
