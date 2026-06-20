@@ -29,12 +29,6 @@ bind j select-pane -D
 bind k select-pane -U
 bind l select-pane -R
 
-# Resize panes
-bind -r H resize-pane -L 5
-bind -r J resize-pane -D 5
-bind -r K resize-pane -U 5
-bind -r L resize-pane -R 5
-
 #Scrollback
 set -g history-limit 50000
 
@@ -115,29 +109,6 @@ setw -g window-status-current-style 'bg=default'
 # Inactive windows (keep as is)
 setw -g window-status-format '  #I:#W #F  '
 setw -g window-status-style 'bg=default,fg=#C8C093'
-
-# F12-style nested session toggle
-bind -T root 'C-`' \
-  set prefix None \;\
-  set key-table off \;\
-  setw -g window-status-style 'fg=#554a62' \;\
-  setw -g window-status-current-style 'fg=#554a62' \;\
-  set -g status-left-style 'fg=#554a62' \;\
-  if -F '#{pane_in_mode}' 'send-keys -X cancel' \;\
-  refresh-client -S
-  
-bind -T off 'C-`' \
-  set -u prefix \;\
-  set -u key-table \;\
-  set -u window-status-style \;\
-  setw -g window-status-style 'bg=default,fg=#C8C093' \;\
-  setw -g window-status-current-style 'bg=default' \;\
-  set -g status-left-style 'fg=#957FB8,bg=#1F1F28,bold' \;\
-  refresh-client -S
-
-# Correctly pass modified keys to processes running in tmux
-set -g extended-keys on
-set -g extended-keys-format csi-u
 
 # LOAD TPM
 run '~/.tmux/plugins/tpm/tpm'
