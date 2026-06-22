@@ -32,14 +32,12 @@ vim.o.selection = "inclusive"                   --Use inclusive selection
 vim.o.modifiable = true                         --Allow editing buffers
 vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
--- vim.o.cursorline = true                         --highlight the current cursor line
 vim.o.splitkeep =
-'screen' --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
+'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 
 --Behavious setting--Sync clipboards
 vim.schedule(function()
-  vim.opt.clipboard:append("unnamedplus")
-  vim.g.clipboard = 'osc52' --For copies over to ssh
+  vim.o.clipboard = "unnamedplus"
 end)
 
 vim.o.swapfile = false --Disable swap file to prevent annoying errors

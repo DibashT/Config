@@ -29,6 +29,7 @@
 
 window#waybar {
     border-bottom: 4px solid shade(@base, 1.1);
+    /* border-bottom: 1px solid shade(@base, 1.1); */
     background-color: shade(#1e1e2e, 0.95);
 }
 
