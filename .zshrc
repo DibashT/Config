@@ -60,6 +60,7 @@ fi
 
 # --- ALIASES ---
 alias vim='nvim'
+alias cat='bat'
 alias zshconfig="nvim ~/.zshrc"
 alias reload="source ~/.zshrc"
 alias ls='ls --color=auto'
