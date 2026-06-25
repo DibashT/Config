@@ -21,9 +21,10 @@ vim.o.cmdheight = 1                             --command line height
 vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = "yes"                        --Alwasy show sign column
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
-vim.o.updatetime = 250                          -- Snapy key
+-- vim.o.updatetime = 250                          -- Snapy key
 vim.o.timeoutlen = 300                          --balance speed
-vim.o.ttimeoutlen = 50                          --fast timesout sequence (ESC)
+-- vim.o.ttimeoutlen = 50                          --fast timesout sequence (ESC)
+vim.o.ttimeoutlen = 1                           --fast timesout sequence (ESC)
 vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
 vim.o.undofile = true                           --Persistent undo
@@ -35,9 +36,21 @@ vim.o.wildignorecase = true                     --Case-sensitive tab completion 
 vim.o.splitkeep =
 'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 
---Behavious setting--Sync clipboards
+--Sync clipboards with system clipboards
+-- vim.schedule(function()
+--   vim.o.clipboard = "unnamedplus"
+-- end)
+--
 vim.schedule(function()
-  vim.o.clipboard = "unnamedplus"
+  local is_ssh = vim.env.SSH_TTY or vim.env.SSH_CONNECTION
+
+  if is_ssh then
+    vim.g.clipboard = "osc52"
+    vim.opt.clipboard = ""
+  else
+    vim.g.clipboard = nil
+    vim.opt.clipboard = "unnamedplus"
+  end
 end)
 
 vim.o.swapfile = false --Disable swap file to prevent annoying errors
@@ -81,6 +94,20 @@ vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.d
   { desc = "Go to previous error" })
 vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
   { desc = "Go to next error" })
+
+-- Easily move between windows
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Better command line movements
+vim.keymap.set("c", "<C-b>", "<Left>")
+vim.keymap.set("c", "<C-f>", "<Right>")
+vim.keymap.set("c", "<C-a>", "<Home>")
+vim.keymap.set("c", "<C-e>", "<End>")
+vim.keymap.set("c", "<M-b>", "<S-Left>")
+vim.keymap.set("c", "<M-f>", "<S-Right>")
 
 -- Clear seacrh highlight
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
@@ -259,11 +286,11 @@ vim.keymap.set('n', '<leader>fc', '<cmd>FzfLua colorschemes<cr>', { desc = 'Pick
 require("nvim-web-devicons").setup({})
 
 --Tree_sitter
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   callback = function()
+--     pcall(vim.treesitter.start)
+--   end,
+-- })
 -- vim.cmd("syntax off")
 
 -- LSP
@@ -301,7 +328,7 @@ require('blink.cmp').setup({
     enabled = true,
     window = {
       show_documentation = false,
-      border = "rounded"
+      border = "rounded",
     },
   },
 })
@@ -505,5 +532,5 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Reduce visual noise (recommended)
+-- Reduce visual noise
 vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })

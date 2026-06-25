@@ -42,42 +42,42 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.ai": {
-      "rev": "bfb26d9072670c3aaefab0f53024b2f3729c8083",
+      "rev": "d73c36349aa7b0bab5f77ad71701a1d42211a1df",
       "src": "https://github.com/echasnovski/mini.ai",
       "version": "'stable'"
     },
     "mini.bufremove": {
-      "rev": "10857aa39160c127694151828914df3131ba83b6",
+      "rev": "4cfbb201b2760da79ca6e1a00e9f67cbc99cbb8f",
       "src": "https://github.com/echasnovski/mini.bufremove",
       "version": "'stable'"
     },
     "mini.comment": {
-      "rev": "a0c721115faff8d05505c0a12dab410084d9e536",
+      "rev": "4677392f091e8b5c18d4b535130220a6d1da4aca",
       "src": "https://github.com/echasnovski/mini.comment",
       "version": "'stable'"
     },
     "mini.indentscope": {
-      "rev": "0308f949f31769e509696af5d5f91cebb2159c69",
+      "rev": "d3f955f09b1a05d25d5a7740338fba2baaee41a3",
       "src": "https://github.com/echasnovski/mini.indentscope",
       "version": "'stable'"
     },
     "mini.move": {
-      "rev": "4d214202d71e0a4066b6288176bbe88f268f9777",
+      "rev": "b9e452f9c83565a1520e14f7531632160f3b0170",
       "src": "https://github.com/echasnovski/mini.move",
       "version": "'stable'"
     },
     "mini.notify": {
-      "rev": "29ec27f60bf4b63e447c851d9061c434d80795a6",
+      "rev": "821db7d464f7a9bb8666b4ba3be7d2ed637cfcfc",
       "src": "https://github.com/echasnovski/mini.notify",
       "version": "'stable'"
     },
     "mini.pairs": {
-      "rev": "d5a29b6254dad07757832db505ea5aeab9aad43a",
+      "rev": "4a014143fcb4e9df26198ccb3ecff3b9e77a048c",
       "src": "https://github.com/echasnovski/mini.pairs",
       "version": "'stable'"
     },
     "mini.surround": {
-      "rev": "88c52297ed3e69ecf9f8652837888ecc727a28ee",
+      "rev": "580e4cb98c5900d9fe743865fb5a5b2178b4ab18",
       "src": "https://github.com/echasnovski/mini.surround",
       "version": "'stable'"
     },
