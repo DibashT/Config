@@ -17,7 +17,6 @@ vim.o.scrolloff = 10                            -- Keep 10 line below/above curs
 vim.o.sidescrolloff = 10                        -- Keep 10 line left/right cusrsor line
 vim.o.wrap = false                              --Don't wrap lines
 vim.o.spelllang = "en"                          -- spell check
-vim.o.cmdheight = 1                             --command line height
 vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = "yes"                        --Alwasy show sign column
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
@@ -29,8 +28,7 @@ vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
 vim.o.undofile = true                           --Persistent undo
 vim.o.undolevels = 10000                        --allows to safely travesre  much further
-vim.o.selection = "inclusive"                   --Use inclusive selection
-vim.o.modifiable = true                         --Allow editing buffers
+-- vim.o.selection = "inclusive"                   --Use inclusive selection
 vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
 vim.o.splitkeep =
@@ -425,6 +423,54 @@ require("oil").setup({
   },
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+
+vim.opt.grepprg = "rg --vimgrep --smart-case"
+vim.opt.grepformat = "%f:%l:%c:%m"
+-- For note taking
+local wiki = vim.fn.expand("~/git/wiki")
+
+-- Open wiki index
+vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+
+-- Browse wiki with oil
+vim.keymap.set("n", "<leader>wo", "<cmd>Oil " .. wiki .. "<CR>", { desc = "Browse wiki" })
+
+-- New note
+vim.keymap.set("n", "<leader>wn", function()
+  local name = vim.fn.input("Note name: ")
+  if name ~= "" then
+    vim.cmd("edit " .. wiki .. "/" .. name .. ".md")
+    vim.cmd("lcd %:p:h")
+  end
+end, { desc = "New note" })
+
+-- Search notes (fzf-lua live grep scoped to wiki)
+vim.keymap.set("n", "<leader>wg", function()
+  require("fzf-lua").live_grep({ cwd = wiki })
+end, { desc = "Grep wiki" })
+
+-- Find note by filename
+vim.keymap.set("n", "<leader>wf", function()
+  require("fzf-lua").files({ cwd = wiki })
+end, { desc = "Find wiki file" })
+
+-- vim.keymap.set("n", "<leader>ws", function()
+--   vim.cmd("!cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push")
+-- end, { desc = "Sync wiki" })
+vim.keymap.set("n", "<leader>ws", function()
+  vim.fn.jobstart(
+    "cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push",
+    {
+      on_exit = function(_, code)
+        if code == 0 then
+          vim.notify("Wiki synced", vim.log.levels.INFO)
+        else
+          vim.notify("Wiki sync failed", vim.log.levels.ERROR)
+        end
+      end,
+    }
+  )
+end, { desc = "Sync wiki" })
 
 -- Lazygit.nvim
 local function git_line_history(start_line, end_line)
