@@ -430,7 +430,16 @@ vim.opt.grepformat = "%f:%l:%c:%m"
 local wiki = vim.fn.expand("~/git/wiki")
 
 -- Open wiki index
-vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+-- vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+vim.keymap.set("n", "<leader>ww", function()
+  local result = vim.fn.systemlist("ls -t " .. wiki .. "/*.md 2>/dev/null | head -1")
+  if result and result[1] and result[1] ~= "" then
+    vim.cmd("edit " .. result[1])
+  else
+    vim.cmd("edit " .. wiki .. "/index.md")
+  end
+  vim.cmd("lcd %:p:h")
+end, { desc = "Open last edited wiki file" })
 
 -- Browse wiki with oil
 vim.keymap.set("n", "<leader>wo", "<cmd>Oil " .. wiki .. "<CR>", { desc = "Browse wiki" })

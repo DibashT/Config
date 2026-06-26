@@ -10,44 +10,45 @@ vim.o.ignorecase = true                         -- Ignore case in search
 vim.o.smartcase = true                          -- ...unless search has capital letters
 vim.o.shiftwidth = 2                            -- Size of an indent
 vim.o.tabstop = 2                               --Tab width
-vim.opt.smartindent = true                      --smart indentation
+vim.o.smartindent = true                        --smart indentation
 vim.o.expandtab = true                          -- Use spaces instead of tabs
 vim.o.termguicolors = true                      -- Better colors
 vim.o.scrolloff = 10                            -- Keep 10 line below/above cursor line
 vim.o.sidescrolloff = 10                        -- Keep 10 line left/right cusrsor line
 vim.o.wrap = false                              --Don't wrap lines
 vim.o.spelllang = "en"                          -- spell check
-vim.o.cmdheight = 1                             --command line height
 vim.o.confirm = true                            --Raise dialog in unsaved buffer
 vim.o.signcolumn = "yes"                        --Alwasy show sign column
-vim.o.hlsearch = true                           --highlight serach result
-vim.o.incsearch = true                          --Show matches as you type
 vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
-vim.o.updatetime = 250                          -- Snapy key
-vim.o.timeoutlen = 300
+-- vim.o.updatetime = 250                          -- Snapy key
+vim.o.timeoutlen = 300                          --balance speed
+-- vim.o.ttimeoutlen = 50                          --fast timesout sequence (ESC)
+vim.o.ttimeoutlen = 1                           --fast timesout sequence (ESC)
 vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
 vim.o.undofile = true                           --Persistent undo
-vim.o.autoread = true                           --Auto reload file if changed outside
-vim.o.selection = "inclusive"                   --Use inclusive selection
-vim.o.modifiable = true                         --Allow editing buffers
-vim.o.encoding = "UTF-8"                        --Ut8 encoding
-vim.o.wildmenu = true                           --Enable command line completion menu
+vim.o.undolevels = 10000                        --allows to safely travesre  much further
+-- vim.o.selection = "inclusive"                   --Use inclusive selection
 vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
+vim.o.splitkeep =
+'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 
--- Set undo directory and ensure it exists
--- local undodir = "~/.local/share/nvim/undodir"
--- local undodir_path = vim.fn.expand(undodir)
--- vim.o.undodir = undodir_path
--- if vim.fn.isdirectory(undodir_path) == 0 then
---   vim.fn.mkdir(undodir_path, "p")
--- end
-
---Behavious setting--Sync clipboards
+--Sync clipboards with system clipboards
+-- vim.schedule(function()
+--   vim.o.clipboard = "unnamedplus"
+-- end)
+--
 vim.schedule(function()
-  vim.o.clipboard:append("unnamedplus")
-  vim.g.clipboard = 'osc52' --For copies over to ssh
+  local is_ssh = vim.env.SSH_TTY or vim.env.SSH_CONNECTION
+
+  if is_ssh then
+    vim.g.clipboard = "osc52"
+    vim.opt.clipboard = ""
+  else
+    vim.g.clipboard = nil
+    vim.opt.clipboard = "unnamedplus"
+  end
 end)
 
 vim.o.swapfile = false --Disable swap file to prevent annoying errors
@@ -73,7 +74,7 @@ vim.diagnostic.config({
   update_in_insert = false, --nice look for floats (using ty and ruff)
   float = {
     source = "if_many",
-    -- border = "rounded",
+    border = "none",
   },
   jump = { float = true },
 })
@@ -91,6 +92,20 @@ vim.keymap.set("n", "[e", function() vim.diagnostic.goto_prev({ severity = vim.d
   { desc = "Go to previous error" })
 vim.keymap.set("n", "]e", function() vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
   { desc = "Go to next error" })
+
+-- Easily move between windows
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Better command line movements
+vim.keymap.set("c", "<C-b>", "<Left>")
+vim.keymap.set("c", "<C-f>", "<Right>")
+vim.keymap.set("c", "<C-a>", "<Home>")
+vim.keymap.set("c", "<C-e>", "<End>")
+vim.keymap.set("c", "<M-b>", "<S-Left>")
+vim.keymap.set("c", "<M-f>", "<S-Right>")
 
 -- Clear seacrh highlight
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
@@ -146,15 +161,6 @@ vim.pack.add({
   'https://github.com/nvim-tree/nvim-web-devicons',
   { src = 'https://github.com/saghen/blink.cmp',             version = vim.version.range('1.x') },
   'https://github.com/nvim-lualine/lualine.nvim',
-  -- Mini plugins with version pinning
-  -- { src = 'https://github.com/echasnovski/mini.ai',          version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.comment',     version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.move',        version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.surround',    version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.indentscope', version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.pairs',       version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.bufremove',   version = '*' },
-  -- { src = 'https://github.com/echasnovski/mini.notify',      version = '*' },
   --Mini stable --
   { src = 'https://github.com/echasnovski/mini.ai',          version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.comment',     version = 'stable' },
@@ -278,11 +284,11 @@ vim.keymap.set('n', '<leader>fc', '<cmd>FzfLua colorschemes<cr>', { desc = 'Pick
 require("nvim-web-devicons").setup({})
 
 --Tree_sitter
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
-})
+-- vim.api.nvim_create_autocmd("FileType", {
+--   callback = function()
+--     pcall(vim.treesitter.start)
+--   end,
+-- })
 -- vim.cmd("syntax off")
 
 -- LSP
@@ -295,10 +301,7 @@ vim.lsp.enable({
 vim.keymap.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "ca", vim.lsp.buf.code_action, { desc = "Code actions" })
 vim.keymap.set("n", "rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover documentations" })
 
-
-vim.o.signcolumn = 'yes' -- make lsp warnings not widen the gutter
 -- Auto-format ("lint") on save (adapted from neovim docs :help auto-format)
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', { clear = true }),
@@ -323,42 +326,10 @@ require('blink.cmp').setup({
     enabled = true,
     window = {
       show_documentation = false,
-      border = "rounded"
+      border = "rounded",
     },
   },
 })
-
--- Dap (debugging)
--- local dap = require('dap')
--- dap.adapters.debugpy = function(cb, config) -- also $ uv tool install debugpy@latest
---   if config.request == 'attach' then
---     cb({
---       type = 'server',
---       port = config.connect.port,
---       host = config.connect.host or '127.0.0.1',
---     })
---   else
---     cb({
---       type = 'executable',
---       command = 'debugpy-adapter',
---     })
---   end
--- end
--- dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
---   {
---     type = 'debugpy',
---     request = 'launch',
---     name = 'Launch file',
---     program = '${file}',
---     python = function()
---       local root = vim.fs.root(0, '.venv')
---       return { root and root .. '/.venv/bin/python' or 'python3' }
---     end,
---     cwd = function()
---       return vim.fs.root(0, '.venv') or vim.fn.getcwd()
---     end,
---   },
--- }
 
 -- Dap (debugging)
 local dap = require('dap')
@@ -453,6 +424,54 @@ require("oil").setup({
 })
 vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
+vim.opt.grepprg = "rg --vimgrep --smart-case"
+vim.opt.grepformat = "%f:%l:%c:%m"
+-- For note taking
+local wiki = vim.fn.expand("~/git/wiki")
+
+-- Open wiki index
+vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+
+-- Browse wiki with oil
+vim.keymap.set("n", "<leader>wo", "<cmd>Oil " .. wiki .. "<CR>", { desc = "Browse wiki" })
+
+-- New note
+vim.keymap.set("n", "<leader>wn", function()
+  local name = vim.fn.input("Note name: ")
+  if name ~= "" then
+    vim.cmd("edit " .. wiki .. "/" .. name .. ".md")
+    vim.cmd("lcd %:p:h")
+  end
+end, { desc = "New note" })
+
+-- Search notes (fzf-lua live grep scoped to wiki)
+vim.keymap.set("n", "<leader>wg", function()
+  require("fzf-lua").live_grep({ cwd = wiki })
+end, { desc = "Grep wiki" })
+
+-- Find note by filename
+vim.keymap.set("n", "<leader>wf", function()
+  require("fzf-lua").files({ cwd = wiki })
+end, { desc = "Find wiki file" })
+
+-- vim.keymap.set("n", "<leader>ws", function()
+--   vim.cmd("!cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push")
+-- end, { desc = "Sync wiki" })
+vim.keymap.set("n", "<leader>ws", function()
+  vim.fn.jobstart(
+    "cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push",
+    {
+      on_exit = function(_, code)
+        if code == 0 then
+          vim.notify("Wiki synced", vim.log.levels.INFO)
+        else
+          vim.notify("Wiki sync failed", vim.log.levels.ERROR)
+        end
+      end,
+    }
+  )
+end, { desc = "Sync wiki" })
+
 -- Lazygit.nvim
 local function git_line_history(start_line, end_line)
   start_line, end_line = math.min(start_line, end_line), math.max(start_line, end_line)
@@ -478,11 +497,11 @@ vim.keymap.set('v', '<leader>gl', function()
   git_line_history(vim.fn.line('v'), vim.fn.line('.'))
 end, { desc = 'Git line history' })
 
--- --Lazygit
--- vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
--- vim.keymap.set("n", "<leader>gb", function()
---   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
--- end, { desc = "Open git remote" })
+--Lazygit
+vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
+vim.keymap.set("n", "<leader>gb", function()
+  vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
+end, { desc = "Open git remote" })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
@@ -494,7 +513,7 @@ vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code dif
 local alpha = require("alpha")
 local dashboard = require("alpha.themes.dashboard")
 
--- 1. Header (ASCII Art)
+-- Header (ASCII Art)
 dashboard.section.header.val = {
   [[                                __                ]],
   [[ ___     ___    ___    __  __ /\_\    ___ ___    ]],
@@ -504,7 +523,7 @@ dashboard.section.header.val = {
   [[ \/_/\/_/\/____/\/___/  \/__/    \/_/\/_/\/_/\/_/]],
 }
 
--- 2. Buttons
+-- Buttons
 dashboard.section.buttons.val = {
   dashboard.button("f", "󰈞  Find File", "<cmd>FzfLua files<CR>"),
   dashboard.button("n", "  New File", "<cmd>ene <BAR> startinsert <CR>"),
@@ -514,20 +533,20 @@ dashboard.section.buttons.val = {
   dashboard.button("q", "󰅚  Quit", "<cmd>qa<CR>"),
 }
 
--- 3. Footer (Fixed for Neovim 0.12 native package manager)
+-- Footer (Fixed for Neovim 0.12 native package manager)
 local count = #vim.pack.get()
 -- Native calculation of total elapsed milliseconds since binary startup
 local ms = math.floor(vim.fn.reltimefloat(vim.fn.reltime()) * 1000)
 dashboard.section.footer.val = "⚡ Neovim loaded " .. count .. " packages in " .. ms .. "ms"
 
--- 4. Highlights (Kanagawa compatible)
+-- Highlights (Kanagawa compatible)
 dashboard.section.header.opts.hl = "AlphaHeader"
 dashboard.section.buttons.opts.hl = "AlphaButtons"
 dashboard.section.footer.opts.hl = "AlphaFooter"
 
 alpha.setup(dashboard.opts)
 
---Leap.nvim configuration
+-- Leap.nvim configuration
 require("leap").opts.safe_labels = {} -- Jump immediately to single matches
 require("leap").opts.labels =
 -- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
@@ -559,5 +578,5 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Reduce visual noise (recommended)
+-- Reduce visual noise
 vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
