@@ -454,14 +454,14 @@ vim.keymap.set("n", "<leader>wn", function()
 end, { desc = "New note" })
 
 -- Search notes (fzf-lua live grep scoped to wiki)
-vim.keymap.set("n", "<leader>wg", function()
-  require("fzf-lua").live_grep({ cwd = wiki })
-end, { desc = "Grep wiki" })
+-- vim.keymap.set("n", "<leader>wg", function()
+--   require("fzf-lua").live_grep({ cwd = wiki })
+-- end, { desc = "Grep wiki" })
 
--- Find note by filename
-vim.keymap.set("n", "<leader>wf", function()
-  require("fzf-lua").files({ cwd = wiki })
-end, { desc = "Find wiki file" })
+-- -- Find note by filename
+-- vim.keymap.set("n", "<leader>wf", function()
+--   require("fzf-lua").files({ cwd = wiki })
+-- end, { desc = "Find wiki file" })
 
 -- vim.keymap.set("n", "<leader>ws", function()
 --   vim.cmd("!cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push")
