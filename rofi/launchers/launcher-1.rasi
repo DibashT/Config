@@ -11,10 +11,10 @@
 configuration {
 	modi:                       "drun,run,window"; //removed filebrowser
     show-icons:                 true;
-    display-drun:               "APPS";
-    display-run:                "RUN";
+    display-drun:               " APPS";
+    display-run:                " RUN";
     // display-filebrowser:        "FILES";
-    // display-window:             "WINDOW";
+    display-window:             " WIN";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
 }
@@ -32,8 +32,8 @@ configuration {
     background:                  #1F1F28; /* sumiInk1 (Main Background) */
     background-alt:              #2A2A37; /* sumiInk3 (Search bar & buttons) */
     foreground:                  #DCD7BA; /* fujiWhite (Text) */
-    selected:                    #2D4F67; /* waveBlue2 (Selected items) */
     active:                      #7E9CD8; /* crystalBlue (Active states) */
+    selected:                    #2D4F67; /* lavneder */
     urgent:                      #E82424; /* samuraiRed (Urgent states) */
 }
 

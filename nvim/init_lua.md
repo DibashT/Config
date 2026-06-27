@@ -1,8 +1,8 @@
---Set LeadeR
+# Set LeadeR
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Basic Settings
+# Basic Settings
 vim.o.number = true                             -- Show line numbers
 vim.o.relativenumber = true                     -- Relative line numbers (easier jumping)
 vim.o.mouse = "a"                               -- Enable mouse support
