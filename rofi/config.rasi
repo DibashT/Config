@@ -11,10 +11,10 @@
 configuration {
 	modi:                       "drun,run,window"; //removed filebrowser
     show-icons:                 true;
-    display-drun:               "APPS";
-    display-run:                "RUN";
+    display-drun:               " APPS";
+    display-run:                " RUN";
     // display-filebrowser:        "FILES";
-    // display-window:             "WINDOW";
+    display-window:             " WIN";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
 }

@@ -14,7 +14,7 @@
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "fzf-lua": {
-      "rev": "b6f0392fe1645973c795b5bbbd8d6db466a5a25a",
+      "rev": "029a162a6671fdd453001fc1bca047ee3ecd5481",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "kanagawa.nvim": {
@@ -34,7 +34,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mason-lspconfig.nvim": {
-      "rev": "50bf3871b539896bd0650b882f6e6b467cc1c1eb",
+      "rev": "47059d71b42d74b0a1e9f61c1d99d301039c3b5b",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
     },
     "mason.nvim": {
