@@ -1,8 +1,8 @@
-# Set LeadeR
+--Set LeadeR
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-# Basic Settings
+-- Basic Settings
 vim.o.number = true                             -- Show line numbers
 vim.o.relativenumber = true                     -- Relative line numbers (easier jumping)
 vim.o.mouse = "a"                               -- Enable mouse support
@@ -430,7 +430,16 @@ vim.opt.grepformat = "%f:%l:%c:%m"
 local wiki = vim.fn.expand("~/git/wiki")
 
 -- Open wiki index
-vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+-- vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
+vim.keymap.set("n", "<leader>ww", function()
+  local result = vim.fn.systemlist("ls -t " .. wiki .. "/*.md 2>/dev/null | head -1")
+  if result and result[1] and result[1] ~= "" then
+    vim.cmd("edit " .. result[1])
+  else
+    vim.cmd("edit " .. wiki .. "/index.md")
+  end
+  vim.cmd("lcd %:p:h")
+end, { desc = "Open last edited wiki file" })
 
 -- Browse wiki with oil
 vim.keymap.set("n", "<leader>wo", "<cmd>Oil " .. wiki .. "<CR>", { desc = "Browse wiki" })
@@ -445,14 +454,14 @@ vim.keymap.set("n", "<leader>wn", function()
 end, { desc = "New note" })
 
 -- Search notes (fzf-lua live grep scoped to wiki)
-vim.keymap.set("n", "<leader>wg", function()
-  require("fzf-lua").live_grep({ cwd = wiki })
-end, { desc = "Grep wiki" })
+-- vim.keymap.set("n", "<leader>wg", function()
+--   require("fzf-lua").live_grep({ cwd = wiki })
+-- end, { desc = "Grep wiki" })
 
--- Find note by filename
-vim.keymap.set("n", "<leader>wf", function()
-  require("fzf-lua").files({ cwd = wiki })
-end, { desc = "Find wiki file" })
+-- -- Find note by filename
+-- vim.keymap.set("n", "<leader>wf", function()
+--   require("fzf-lua").files({ cwd = wiki })
+-- end, { desc = "Find wiki file" })
 
 -- vim.keymap.set("n", "<leader>ws", function()
 --   vim.cmd("!cd " .. vim.fn.expand("~/git/wiki") .. " && git add . && git commit -m 'update' && git push")

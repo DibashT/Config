@@ -175,7 +175,7 @@ vim.pack.add({
   -- color scheme
   'https://github.com/rebelot/kanagawa.nvim',
   { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
-  -- 'https://github.com/vague-theme/vague.nvim',
+  'https://github.com/vague-theme/vague.nvim',
 })
 
 require("mason").setup()
