@@ -33,6 +33,8 @@ vim.o.wildmode = "longest:full,full"            --Completion mode for command-li
 vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
 vim.o.splitkeep =
 'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
+vim.o.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 --Sync clipboards with system clipboards
 -- vim.schedule(function()
@@ -240,7 +242,6 @@ require("mini.notify").setup({})
 
 --Fzf-lua
 require("fzf-lua").setup({
-  -- Disabled default fzf colors as per your reference snippet
   fzf_colors = true,
   -- Imported the custom ripgrep options for better search match highlighting
   grep = {

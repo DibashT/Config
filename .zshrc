@@ -76,4 +76,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 
 eval "$(pyenv init -)"
+# --- PIP ALIAS ---
+alias pip='python3 -m pip'
 export PATH="$HOME/.npm-global/bin:$PATH"
