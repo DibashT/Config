@@ -414,6 +414,7 @@ require("oil").setup({
   columns = {
     "icon",
     "mtime",
+    highlight = "comment"
   },
   view_options = {
     show_hidden = true,
