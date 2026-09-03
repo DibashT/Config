@@ -5,42 +5,43 @@ vim.g.maplocalleader = " "
 -- Basic Settings
 vim.o.number = true                             -- Show line numbers
 vim.o.relativenumber = true                     -- Relative line numbers (easier jumping)
-vim.o.mouse = "a"                               -- Enable mouse support
-vim.o.ignorecase = true                         -- Ignore case in search
-vim.o.smartcase = true                          -- ...unless search has capital letters
-vim.o.shiftwidth = 2                            -- Size of an indent
-vim.o.tabstop = 2                               --Tab width
-vim.o.smartindent = true                        --smart indentation
-vim.o.expandtab = true                          -- Use spaces instead of tabs
-vim.o.termguicolors = true                      -- Better colors
 vim.o.scrolloff = 10                            -- Keep 10 line below/above cursor line
 vim.o.sidescrolloff = 10                        -- Keep 10 line left/right cusrsor line
-vim.o.wrap = false                              --Don't wrap lines
+vim.o.wrap = false                              -- Don't wrap lines
+vim.o.mouse = "a"                               -- Enable mouse support
+
+vim.o.shiftwidth = 2                            -- Size of an indent
+vim.o.tabstop = 2                               -- Tab width
+vim.o.smartindent = true                        -- smart indentation
+vim.o.expandtab = true                          -- Use spaces instead of tabs
+
+vim.o.ignorecase = true                         -- Ignore case in search
+vim.o.smartcase = true                          -- unless search has capital letters
+
+vim.o.termguicolors = true                      -- Better colors
+vim.o.signcolumn = "yes"                        -- Alwasy show sign column
+vim.o.completeopt = "menuone,noinsert,noselect" -- Completion options
 vim.o.spelllang = "en"                          -- spell check
-vim.o.confirm = true                            --Raise dialog in unsaved buffer
-vim.o.signcolumn = "yes"                        --Alwasy show sign column
-vim.o.completeopt = "menuone,noinsert,noselect" --Completion options
--- vim.o.updatetime = 250                          -- Snapy key
-vim.o.timeoutlen = 300                          --balance speed
--- vim.o.ttimeoutlen = 50                          --fast timesout sequence (ESC)
-vim.o.ttimeoutlen = 1                           --fast timesout sequence (ESC)
-vim.o.splitright = true                         -- Window split
+vim.o.confirm = true                            -- Raise dialog in unsaved buffer
+-- vim.opt.colorcolumn = "80"                      -- show column at 80 position char
+-- vim.o.updatetime = 250                       -- Snapy key
+vim.o.timeoutlen = 300               --balance speed
+vim.o.ttimeoutlen = 1                --fast timesout sequence (ESC)
+vim.o.splitright = true              -- Window split
 vim.o.splitbelow = true
-vim.o.undofile = true                           --Persistent undo
-vim.o.undolevels = 10000                        --allows to safely travesre  much further
+vim.o.undofile = true                --Persistent undo
+vim.o.undolevels = 10000             --allows to safely travesre  much further
 -- vim.o.selection = "inclusive"                   --Use inclusive selection
-vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
-vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
+vim.o.wildmode = "longest:full,full" --Completion mode for command-line
+vim.o.wildignorecase = true          --Case-sensitive tab completion in commands
 vim.o.splitkeep =
-'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
+'screen'                             --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.o.swapfile = false --Disable swap file to prevent annoying errors
+vim.o.autoread = true  --auto reload changes
 
 --Sync clipboards with system clipboards
--- vim.schedule(function()
---   vim.o.clipboard = "unnamedplus"
--- end)
---
 vim.schedule(function()
   local is_ssh = vim.env.SSH_TTY or vim.env.SSH_CONNECTION
 
@@ -52,8 +53,6 @@ vim.schedule(function()
     vim.opt.clipboard = "unnamedplus"
   end
 end)
-
-vim.o.swapfile = false --Disable swap file to prevent annoying errors
 
 -- Copy to clipboard shortcuts
 vim.keymap.set("n", "<leader>cp", function()
@@ -68,6 +67,9 @@ vim.keymap.set("n", "<leader>cr", function()
   vim.notify("Copied: " .. path)
 end, { desc = "Copy relative path" })
 
+-- Cursor shape per mode
+vim.o.guicursor = "n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50"
+
 --Vim diagnostic
 vim.diagnostic.config({
   underline = false,        --dont underline error
@@ -76,7 +78,7 @@ vim.diagnostic.config({
   update_in_insert = false, --nice look for floats (using ty and ruff)
   float = {
     source = "if_many",
-    border = "none",
+    border = "rounded",
   },
   jump = { float = true },
 })
@@ -122,9 +124,6 @@ vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line in cursor position" })
 --Quick config setting
 vim.keymap.set("n", "<leader>rc", "<Cmd>e ~/.config/nvim/init.lua<CR>", { desc = "Edit config" })
 
--- Cursor shape per mode
-vim.o.guicursor = "n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50"
-
 -- Restore last cursor position when reopening a file
 local last_cursor_group = vim.api.nvim_create_augroup("LastCursorGroup", {})
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -149,10 +148,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 --https://echasnovski.com/blog/2026-03-13-a-guide-to-vim-pack#update
 vim.pack.add({
   'https://github.com/ibhagwan/fzf-lua',
-  'https://github.com/nvim-treesitter/nvim-treesitter',
+  {
+    src = "https://github.com/nvim-treesitter/nvim-treesitter",
+    branch = main,
+    build = ":TSUpdate",
+  },
   -- Dependencies are flatly listed in their required loading order
   'https://github.com/mason-org/mason.nvim',
-  'https://github.com/mason-org/mason-lspconfig.nvim',
+  -- 'https://github.com/mason-org/mason-lspconfig.nvim',
   'https://github.com/neovim/nvim-lspconfig',
   'https://github.com/mfussenegger/nvim-dap',
   'https://github.com/stevearc/oil.nvim',
@@ -199,24 +202,89 @@ vim.cmd('colorscheme kanagawa-wave')
 --Rose pine colorscheme
 require("rose-pine").setup()
 
--- Treesitter (Neovim 0.12 Native Way)
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    pcall(vim.treesitter.start)
-  end,
-})
+-- -- Treesitter (Neovim 0.12 Native Way)
+-- vim.api.nvim_create_autocmd("FileType", {
+--   callback = function()
+--     pcall(vim.treesitter.start)
+--   end,
+-- })
+--
+-- -- Install the parsers you need
+-- local parsers = {
+--   "c", "cpp", "lua", "vim", "vimdoc", "query", "python", "markdown", "markdown_inline",
+--   "html", "css", "javascript", "typescript", "tsx",
+--   "json", "yaml", "toml", "xml",
+--   "bash", "dockerfile", "make", "regex",
+--   "git_config", "gitcommit", "gitignore", "git_rebase"
+-- }
+-- pcall(function()
+--   require("nvim-treesitter").install(parsers)
+-- end)
+--
 
--- Install the parsers you need
-local parsers = {
-  "c", "lua", "vim", "vimdoc", "query", "python", "markdown", "markdown_inline",
-  "html", "css", "javascript", "typescript", "tsx",
-  "json", "yaml", "toml", "xml",
-  "bash", "dockerfile", "make", "regex",
-  "git_config", "gitcommit", "gitignore", "git_rebase"
-}
-pcall(function()
-  require("nvim-treesitter").install(parsers)
-end)
+local setup_treesitter = function()
+  local treesitter = require("nvim-treesitter")
+  treesitter.setup({})
+  local ensure_installed = {
+    "vim",
+    "vimdoc",
+    "query",
+    "rust",
+    "c",
+    "cpp",
+    "c_sharp",
+    "go",
+    "html",
+    "css",
+    "javascript",
+    "typescript",
+    "tsx",
+    "vue",
+    "svelte",
+    "json",
+    "yaml",
+    "toml",
+    "xml",
+    "lua",
+    "markdown",
+    "markdown_inline",
+    "python",
+    "bash",
+    "dockerfile",
+    "make",
+    "regex",
+    "git_config",
+    "gitcommit",
+    "gitignore",
+    "git_rebase",
+  }
+
+  local config = require("nvim-treesitter.config")
+
+  local already_installed = config.get_installed()
+  local parsers_to_install = {}
+
+  for _, parser in ipairs(ensure_installed) do
+    if not vim.tbl_contains(already_installed, parser) then
+      table.insert(parsers_to_install, parser)
+    end
+  end
+
+  if #parsers_to_install > 0 then
+    treesitter.install(parsers_to_install)
+  end
+
+  local group = vim.api.nvim_create_augroup("TreeSitterConfig", { clear = true })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    callback = function(args)
+      if vim.list_contains(config.get_installed(), vim.treesitter.language.get_lang(args.match)) then
+        vim.treesitter.start(args.buf)
+      end
+    end,
+  })
+end
+setup_treesitter()
 
 -- Statusline (Lualine)
 require("lualine").setup({
@@ -400,7 +468,19 @@ dap.configurations.python = { -- https://github.com/microsoft/debugpy/wiki/Debug
 vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug toggle breakpoint' })
 vim.keymap.set('n', '<leader>dc', dap.continue, { desc = 'Debug continue' })
 vim.keymap.set('n', '<leader>dq', dap.terminate, { desc = 'Debug terminate' })
-vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = 'Debug open REPL' })
+-- vim.keymap.set('n', '<leader>dr', dap.repl.open, { desc = 'Debug open REPL' })
+vim.keymap.set('n', '<leader>dr', function()
+  dap.repl.open({ height = 12 }, 'belowright split')
+end, { desc = 'Debug open REPL' })
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'dap-repl',
+  callback = function(ev)
+    vim.keymap.set('i', '<C-p>', function() require('dap.repl').on_up() end,
+      { buffer = ev.buf, desc = 'DAP REPL previous history' })
+    vim.keymap.set('i', '<C-n>', function() require('dap.repl').on_down() end,
+      { buffer = ev.buf, desc = 'DAP REPL next history' })
+  end,
+})
 vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = 'Debug run last' })
 vim.keymap.set({ 'n', 'v' }, '<leader>dh', require('dap.ui.widgets').hover, { desc = 'Debug hover' })
 vim.keymap.set('n', '<Down>', dap.step_over, { desc = 'Debug step over' })
@@ -428,9 +508,9 @@ vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 vim.opt.grepprg = "rg --vimgrep --smart-case"
 vim.opt.grepformat = "%f:%l:%c:%m"
+
 -- For note taking
 local wiki = vim.fn.expand("~/git/wiki")
-
 -- Open wiki index
 -- vim.keymap.set("n", "<leader>ww", "<cmd>edit " .. wiki .. "/index.md<CR>:lcd %:p:h<CR>", { desc = "Open wiki index" })
 vim.keymap.set("n", "<leader>ww", function()
@@ -509,16 +589,24 @@ vim.keymap.set('v', '<leader>gl', function()
 end, { desc = 'Git line history' })
 
 --Lazygit
-vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
-vim.keymap.set("n", "<leader>gb", function()
-  vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
-end, { desc = "Open git remote" })
+-- vim.keymap.set("n", "<leader>g", "<cmd>LazyGit<cr>", { desc = "LazyGit" })
+-- vim.keymap.set("n", "<leader>gb", function()
+--   vim.ui.open(vim.fn.systemlist("git remote get-url origin")[1])
+-- end, { desc = "Open git remote" })
 
 -- Codediff (vscode like diffs :))
 require("codediff").setup({})
 vim.keymap.set('n', '<leader>ru', '<cmd>CodeDiff<cr>', { desc = 'Code diff not staged' })
 vim.keymap.set('n', '<leader>rm', '<cmd>CodeDiff main<cr>', { desc = 'Code diff main' })
 vim.keymap.set('n', '<leader>rh', '<cmd>CodeDiff HEAD~1<cr>', { desc = 'Code diff previous commit' })
+vim.api.nvim_create_autocmd("User", {
+  pattern = "CodeDiffOpen",
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+      vim.wo[win].cursorline = false
+    end
+  end,
+})
 
 -- Neovim home screen
 local alpha = require("alpha")
