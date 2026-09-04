@@ -10,7 +10,7 @@
       "version": "1.0.0 - 2.0.0"
     },
     "codediff.nvim": {
-      "rev": "533648ec092ee097bf295f45c424df3dc026f8de",
+      "rev": "f67ccdcc0bcf262821f4c4887ca08f3960499bad",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "fzf-lua": {
@@ -86,7 +86,7 @@
       "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-lspconfig": {
-      "rev": "ee1e369181a9e64904cdd7b739e98c70778cfc71",
+      "rev": "84252f9832fb5b9024fe9f7258e7c2aff915e6fb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {

@@ -24,18 +24,18 @@ vim.o.completeopt = "menuone,noinsert,noselect" -- Completion options
 vim.o.spelllang = "en"                          -- spell check
 vim.o.confirm = true                            -- Raise dialog in unsaved buffer
 -- vim.opt.colorcolumn = "80"                      -- show column at 80 position char
--- vim.o.updatetime = 250                       -- Snapy key
-vim.o.timeoutlen = 300               --balance speed
-vim.o.ttimeoutlen = 1                --fast timesout sequence (ESC)
-vim.o.splitright = true              -- Window split
+vim.o.updatetime = 250                          -- Snapy key
+vim.o.timeoutlen = 300                          --balance speed
+vim.o.ttimeoutlen = 1                           --fast timesout sequence (ESC)
+vim.o.splitright = true                         -- Window split
 vim.o.splitbelow = true
-vim.o.undofile = true                --Persistent undo
-vim.o.undolevels = 10000             --allows to safely travesre  much further
+vim.o.undofile = true                           --Persistent undo
+vim.o.undolevels = 10000                        --allows to safely travesre  much further
 -- vim.o.selection = "inclusive"                   --Use inclusive selection
-vim.o.wildmode = "longest:full,full" --Completion mode for command-line
-vim.o.wildignorecase = true          --Case-sensitive tab completion in commands
+vim.o.wildmode = "longest:full,full"            --Completion mode for command-line
+vim.o.wildignorecase = true                     --Case-sensitive tab completion in commands
 vim.o.splitkeep =
-'screen'                             --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
+'screen'                                        --prevents the text from jarringly shifting around when you open horizontal splits or floating windows.
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.o.swapfile = false --Disable swap file to prevent annoying errors
@@ -176,7 +176,7 @@ vim.pack.add({
   { src = 'https://github.com/echasnovski/mini.bufremove',   version = 'stable' },
   { src = 'https://github.com/echasnovski/mini.notify',      version = 'stable' },
   -- Non-GitHub URLs
-  'https://codeberg.org/andyg/leap.nvim.git',
+  -- 'https://codeberg.org/andyg/leap.nvim.git',
   -- color scheme
   'https://github.com/rebelot/kanagawa.nvim',
   { src = "https://github.com/rose-pine/neovim", name = "rose-pine" },
@@ -200,7 +200,7 @@ require('kanagawa').setup({
 vim.cmd('colorscheme kanagawa-wave')
 
 --Rose pine colorscheme
-require("rose-pine").setup()
+-- require("rose-pine").setup()
 
 -- -- Treesitter (Neovim 0.12 Native Way)
 -- vim.api.nvim_create_autocmd("FileType", {
@@ -646,36 +646,36 @@ dashboard.section.footer.opts.hl = "AlphaFooter"
 alpha.setup(dashboard.opts)
 
 -- Leap.nvim configuration
-require("leap").opts.safe_labels = {} -- Jump immediately to single matches
-require("leap").opts.labels =
--- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
-{ "a", "s", "d", "f", "g", "h", "j", "k", "l", ";" }
+-- require("leap").opts.safe_labels = {} -- Jump immediately to single matches
+-- require("leap").opts.labels =
+-- -- { "a", "s", "d", "f", "g", "h", "j", "k", "l", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p" }
+-- { "a", "s", "d", "f", "g", "h", "j", "k", "l", ";" }
 
--- Basic bidirectional leap motions
-vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
-vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
-
--- Usage: gs{leap}yap yanks a paragraph at the leap target
-vim.keymap.set({ "n", "o" }, "gs", "<Plug>(leap-remote)")
-vim.keymap.set({ "n", "o" }, "gS", "<Plug>(leap-remote-linewise)")
-
--- Usage: van{label} or vannny to select treesitter nodes
-vim.keymap.set({ "x", "o" }, "an", function()
-  require("leap.treesitter").select({
-    opts = require("leap.user").with_traversal_keys("n", "N"),
-  })
-end)
-
--- Optional: Automatic paste after remote yank
-vim.api.nvim_create_autocmd("User", {
-  pattern = "RemoteOperationDone",
-  group = vim.api.nvim_create_augroup("LeapRemote", {}),
-  callback = function(event)
-    if vim.v.operator == "y" and event.data.register == '"' then
-      vim.cmd("normal! p")
-    end
-  end,
-})
-
--- Reduce visual noise
-vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
+-- -- Basic bidirectional leap motions
+-- vim.keymap.set({ "n", "x", "o" }, "s", "<Plug>(leap)")
+-- vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)")
+--
+-- -- Usage: gs{leap}yap yanks a paragraph at the leap target
+-- vim.keymap.set({ "n", "o" }, "gs", "<Plug>(leap-remote)")
+-- vim.keymap.set({ "n", "o" }, "gS", "<Plug>(leap-remote-linewise)")
+--
+-- -- Usage: van{label} or vannny to select treesitter nodes
+-- vim.keymap.set({ "x", "o" }, "an", function()
+--   require("leap.treesitter").select({
+--     opts = require("leap.user").with_traversal_keys("n", "N"),
+--   })
+-- end)
+--
+-- -- Optional: Automatic paste after remote yank
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "RemoteOperationDone",
+--   group = vim.api.nvim_create_augroup("LeapRemote", {}),
+--   callback = function(event)
+--     if vim.v.operator == "y" and event.data.register == '"' then
+--       vim.cmd("normal! p")
+--     end
+--   end,
+-- })
+--
+-- -- Reduce visual noise
+-- vim.api.nvim_set_hl(0, "LeapBackdrop", { link = "Comment" })
